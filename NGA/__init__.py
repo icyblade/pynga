@@ -9,6 +9,7 @@ from forum import Forum
 from lib.parallel_urllib import ParallelUrllib
 from thread import Thread
 from user import User
+from post import Post
 
 class NGA:
     """Web 端实现"""
@@ -40,6 +41,9 @@ class NGA:
         
     def Thread(self, tid):
         return Thread(tid, self.opener)
+        
+    def Post(self, pid):
+        return Post(pid, self.opener)
         
     def get_all_fids(self):
         """获取所有公开版面列表
