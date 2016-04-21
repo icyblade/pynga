@@ -56,3 +56,11 @@ class User:
                     'timestamp': int(timestamp),
                 })
             page += 1
+            
+    def undo_admin(self, log_id):
+        """取消操作 experimental"""
+        url = 'http://bbs.ngacn.cc/nuke.php?__lib=undo&__act=undo&raw=3&logid={log_id}'.format(log_id=log_id)
+        post_data = {
+            'nouse': 'post',
+        }
+        self.opener.post(url, post_data)
