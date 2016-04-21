@@ -56,7 +56,7 @@ def examine(chunk, login_uid, login_cid):
     pbar.finish()
 
 def load_wardens_data(nga, sub=True):
-    # 载入版主数据
+    """载入版主数据"""
     batchs = []
     fids = nga.get_all_fids()
     for fid in fids:
