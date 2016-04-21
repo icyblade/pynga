@@ -25,29 +25,29 @@ class Thread:
             return 0
 
     def get_replies_in_page(self, page):
-        """获取某页的所有 PID（不包含楼主）
-        rtype: PID, timestamp, UID, 楼层
+        """获取某页的所有 PID（不包含楼主和贴条）
+        rtype: PID, timestamp, UID, 楼层, 内容, 附件(没有是 None)
         """
         url = 'http://bbs.ngacn.cc/read.php?tid={self.tid}&lite=js&page={page}'.format(
             self = self, page = page
         )
         json_data = self.opener.get_json(url)
         for k, reply in json_data['data']['__R'].iteritems():
-            lou = reply['lou']
-            if reply['lou'] != 0:
+            lou = int(reply['lou'])
+            if lou != 0: # 排除楼主
                 if 'pid' in reply:
                     # 正常回复
-                    yield int(reply['pid']), int(reply['postdatetimestamp']), int(reply['authorid']), int(reply['lou'])
+                    if 'attachs' in reply:
+                        yield int(reply['pid']), int(reply['postdatetimestamp']), int(reply['authorid']), lou, reply['content'], reply['attachs']
+                    else:
+                        yield int(reply['pid']), int(reply['postdatetimestamp']), int(reply['authorid']), lou, reply['content'], None
                 elif 'comment_to_id' in reply:
                     # 贴条
-                    p = self.Post(json_data['data']['__R']['0']['comment_to_id'])
-                    for pid, timestamp, uid, lou in p.get_comments():
-                        # TODO: 等二哥修 biug
-                        pass
+                    pass
                     
         
     def get_replies(self):
-        """获取本贴所有 PID
+        """获取本贴所有 PID（不包含楼主和贴条）
         rtype: PID, timestamp, UID, 楼层
         """
         url = 'http://bbs.ngacn.cc/read.php?tid={self.tid}&lite=js'.format(
