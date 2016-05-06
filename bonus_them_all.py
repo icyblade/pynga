@@ -22,7 +22,7 @@ def add_them(chunk, login_uid, login_cid, target_tid):
     pbar.finish()
     
 def main():
-    target_tid = 0 # 目标 TID
+    target_tid = 9251310 # 目标 TID
     nga = NGA(login_uid, login_cid)
     t = nga.Thread(target_tid)
     replies = t.get_replies()
