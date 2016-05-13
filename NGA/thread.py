@@ -59,3 +59,18 @@ class Thread:
         for page in xrange(1, total_pages+1):
             for i in self.get_replies_in_page(page):
                 yield i
+
+    def get_point(self):
+        """获取主楼加分信息
+        rvalue: (uid, [float(加分威望)])
+        """
+        json_data = self.opener.get_json('http://bbs.ngacn.cc/read.php?tid={self.tid}&lite=js'.format(self=self))
+        author_id = json_data['data']['__T']['authorid']
+        try:
+            info = re.findall(
+                '\[[U0-9.\-]+ ([0-9.\-]+) [0-9.\-]+[^\]]*\]\([\S\s]+?\)',
+                json_data['data']['__R']['0']['alterinfo']
+            )
+        except KeyError:
+            return (None, [0])
+        return (author_id, [float(i) for i in info])
