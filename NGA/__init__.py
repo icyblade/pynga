@@ -33,8 +33,8 @@ class NGA:
     def __del__(self):
         self.opener.close()
         
-    def User(self, uid):
-        return User(uid, self.opener)
+    def User(self, uid, username=None):
+        return User(uid, self.opener, username=username)
         
     def Forum(self, fid):
         return Forum(fid, self.opener)

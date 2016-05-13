@@ -1,22 +1,36 @@
 #! coding: utf8
-import json, time, re
+import json, time, re, urllib
 from datetime import datetime, timedelta
 from operator import itemgetter
 from lib.parallel_urllib import ParallelUrllib
 
 class User:
-    def __init__(self, uid, opener):
-        self.uid = uid
-        self.opener = opener
-        self.get_user_info()
+    def __init__(self, uid, opener, username=None):
+        if username is None:
+            self.uid = uid
+            self.opener = opener
+            self.get_user_info_uid()
+        else:
+            self.username = username
+            self.opener = opener
+            self.get_user_info_username()
         
-    def get_user_info(self):
+    def get_user_info_uid(self):
         """获取本用户信息"""
         url = 'http://bbs.ngacn.cc/nuke.php?__lib=ucp&__act=get&uid={self.uid}&lite=js'.format(
             self = self,
         )
         self.user_info = self.opener.get_json(url)
         self.username = self.user_info['data']['0']['username']
+        self.group = self.user_info['data']['0']['group']
+        
+    def get_user_info_username(self):
+        """获取本用户信息"""
+        url = 'http://bbs.ngacn.cc/nuke.php?__lib=ucp&__act=get&username={}&lite=js'.format(
+            urllib.quote(self.username.encode('gbk'))
+        )
+        self.user_info = self.opener.get_json(url)
+        self.uid = self.user_info['data']['0']['uid']
         self.group = self.user_info['data']['0']['group']
         
     def get_admin_log_done(self, start_datetime=None):
