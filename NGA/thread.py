@@ -62,15 +62,17 @@ class Thread:
 
     def get_point(self):
         """获取主楼加分信息
-        rvalue: (uid, [float(加分威望)])
+        rvalue: (uid, [float(声望),float(威望),float(金币)])
         """
         json_data = self.opener.get_json('http://bbs.ngacn.cc/read.php?tid={self.tid}&lite=js'.format(self=self))
         author_id = json_data['data']['__T']['authorid']
         try:
             info = re.findall(
-                '\[[U0-9.\-]+ ([0-9.\-]+) [0-9.\-]+[^\]]*\]\([\S\s]+?\)',
+                '\[[U]?([0-9.\-]+) ([0-9.\-]+) ([0-9.\-]+)[^\]]*\]\([\S\s]+?\)',
                 json_data['data']['__R']['0']['alterinfo']
-            )
+            ) # old pattern
+            info1 = re.findall('\[[AU]?([\-0-9.]+) ([\-0-9.]+) ([\-0-9.]+) [^\]]*\]', json_data['data']['__R']['0']['alterinfo'])
+            info = info + info1
         except KeyError:
-            return (None, [0])
-        return (author_id, [float(i) for i in info])
+            return (None, [[0, 0, 0]])
+        return (author_id, [map(float, i) for i in info])

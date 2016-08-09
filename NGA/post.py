@@ -36,5 +36,21 @@ class Post:
             'norvrc': 1 if norvrc else 0,
         }
         #sys.stdout.write(str(url)+'\n')
-        self.opener.post_once(url, post_data) # todo post 会重复加分，solve it
-            
+        self.opener.post_once(url, post_data)
+        
+    def get_point(self):
+        """获取回复加分信息
+        rvalue: (uid, [float(声望),float(威望),float(金币)])
+        """
+        json_data = self.opener.get_json('http://bbs.ngacn.cc/read.php?pid={self.pid}&lite=js'.format(self=self))
+        author_id = json_data['data']['__R']['0']['authorid']
+        try:
+            info = re.findall(
+                '\[[U]?([0-9.\-]+) ([0-9.\-]+) ([0-9.\-]+)[^\]]*\]\([\S\s]+?\)',
+                json_data['data']['__R']['0']['alterinfo']
+            ) # old pattern
+            info1 = re.findall('\[[AU]?([\-0-9.]+) ([\-0-9.]+) ([\-0-9.]+) [^\]]*\]', json_data['data']['__R']['0']['alterinfo'])
+            info = info + info1
+        except KeyError:
+            return (None, [[0, 0, 0]])
+        return (author_id, [map(float, i) for i in info])
