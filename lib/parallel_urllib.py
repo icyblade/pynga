@@ -51,7 +51,6 @@ class ParallelUrllib:
             r = self.opener.open(url, timeout = self.timeout)
             html = r.read()
         except (urllib2.HTTPError, urllib2.URLError, socket.error, socket.timeout) as e:
-            print(e)
             return e
         return self.decode(html)
 
