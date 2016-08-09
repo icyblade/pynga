@@ -24,10 +24,10 @@ def main():
         author_name, points = t.get_point()
         if not author_name is None:
             if author_name in db:
-                db[author_name][tid] = points
+                db[author_name][tid] = [i[1] for i in points]
             else:
                 db[author_name] = {
-                    tid: points,
+                    tid: [i[1] for i in points],
                 }
     pbar.finish()
 
