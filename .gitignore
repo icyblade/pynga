@@ -64,3 +64,6 @@ target/
 data/
 result/
 config/authentication.py
+
+# pycharm
+.idea/
