@@ -3,7 +3,7 @@ NGA 各项功能的 Python 实现
 
 ## NGA 类
 
-构造函数为 `nga = NGA(登陆用户的UID，登陆用户的CID)`
+构造函数为 `pynga = NGA(登陆用户的UID，登陆用户的CID)`
 
 有 method
 
