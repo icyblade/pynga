@@ -14,7 +14,10 @@ class NGA(object):
 
     def _set_current_user(self):
         authentication = self._get_current_user_info()
-        self.current_user = self.User(uid=authentication['uid'], username=authentication['username'])
+        self.current_user = self.User(
+            uid=authentication['uid'],
+            username=authentication['username']
+        )
 
     def _get_current_user_info(self):
         text = self.session.get_text(f'{HOST}')
@@ -39,4 +42,3 @@ class NGA(object):
 
     def Thread(self, tid):
         return Thread(tid, session=self.session)
-

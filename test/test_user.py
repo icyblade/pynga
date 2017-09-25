@@ -6,6 +6,7 @@ from pynga.user import User
 UID = 42099452
 USERNAME = 'pynga_test_01'
 
+
 def test_init():
     session = Session()
 

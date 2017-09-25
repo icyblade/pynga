@@ -1,5 +1,6 @@
 from pynga.default_config import HOST
 
+
 class User(object):
     def __init__(self, uid=None, username=None, session=None):
         self.uid = uid

@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 NGA_JSON_SHIFT = len('window.script_muti_get_var_store=')
 
+
 class Session(object):
     def __init__(self, authentication=None, max_retries=5, timeout=5):
         self._build_session(authentication, max_retries)
@@ -26,7 +27,10 @@ class Session(object):
         if isinstance(authentication, dict):
             if 'uid' in authentication and 'cid' in authentication:
                 session.headers.update({
-                    'Cookie': f'ngaPassportUid={authentication["uid"]}; ngaPassportCid={authentication["cid"]};'
+                    'Cookie': (
+                        f'ngaPassportUid={authentication["uid"]};'
+                        f'ngaPassportCid={authentication["cid"]};'
+                    )
                 })
             if 'username' in authentication and 'password' in authentication:
                 raise NotImplementedError('Login with username/password is not implemented yet.')
@@ -56,4 +60,3 @@ class Session(object):
         text = self._get(*args, **kwargs)
         json_data = json.loads(text[NGA_JSON_SHIFT:], strict=False)
         return json_data
-

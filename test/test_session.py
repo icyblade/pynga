@@ -23,6 +23,7 @@ def test_init():
     with pytest.raises(ValueError, message='max_retries should be greater or equal to 1.'):
         ValueError, Session(max_retries=-1)
 
+
 def test_http_get():
     session = Session()
 
@@ -35,4 +36,3 @@ def test_http_get():
 
     json_data = session.get_json('http://bbs.ngacn.cc/thread.php?fid=7&lite=js')
     assert json_data['data']['__F']['fid'] == 7
-

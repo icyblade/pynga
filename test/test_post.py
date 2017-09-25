@@ -5,6 +5,7 @@ from pynga.session import Session
 
 PID = 138966442
 
+
 def test_init():
     session = Session()
     Post(PID, session=session)
@@ -12,9 +13,11 @@ def test_init():
     with pytest.raises(ValueError, message='session should be specified.'):
         Post(PID)
 
+
 def test_repr():
     session = Session()
     assert repr(Post(PID, session=session)) == '<pynga.posts.Post, pid=138966442>'
+
 
 def test_user():
     session = Session()
@@ -22,8 +25,9 @@ def test_user():
     assert post.user.username == 'icyblade'
 
     post = Post(session=session)
-    assert post.user.uid == None
-    assert post.user.username == None
+    assert post.user.uid is None
+    assert post.user.username is None
+
 
 def test_subject():
     session = Session()
@@ -31,7 +35,8 @@ def test_subject():
     assert post.subject == 'test'
 
     post = Post(session=session)
-    assert post.subject == None
+    assert post.subject is None
+
 
 def test_content():
     session = Session()
@@ -39,4 +44,4 @@ def test_content():
     assert post.content == '占楼占楼占楼占楼占楼占楼占楼占楼<br/>备用楼'
 
     post = Post(session=session)
-    assert post.content == None
+    assert post.content is None
