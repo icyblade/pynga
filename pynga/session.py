@@ -60,3 +60,14 @@ class Session(object):
         text = self._get(*args, **kwargs)
         json_data = json.loads(text[NGA_JSON_SHIFT:], strict=False)
         return json_data
+
+    def _post(self, *args, **kwargs):  # pragma: no cover
+        kwargs['timeout'] = self.timeout
+        r = self.session.post(*args, **kwargs)
+        r.encoding = 'gbk'
+        return r.text
+
+    def post_read_json(self, *args, **kwargs):  # pragma: no cover
+        text = self._post(*args, **kwargs)
+        json_data = json.loads(text[NGA_JSON_SHIFT:], strict=False)
+        return json_data

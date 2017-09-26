@@ -45,3 +45,15 @@ def test_content():
 
     post = Post(session=session)
     assert post.content is None
+
+
+def test_tid():
+    session = Session()
+    post = Post(PID, session=session)
+    assert post.tid == 7384678
+
+
+def test_fid():
+    session = Session()
+    post = Post(PID, session=session)
+    assert post.fid == 188
