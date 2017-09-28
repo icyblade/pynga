@@ -1,5 +1,3 @@
-from functools import lru_cache
-
 from pynga.default_config import HOST
 from pynga.post import Post
 from pynga.user import User
@@ -17,7 +15,6 @@ class Thread(object):
         return f'<pynga.thread.Thread, tid={self.tid}>'
 
     @property
-    @lru_cache(1)
     def raw(self):
         from math import ceil
 
@@ -55,16 +52,16 @@ class Thread(object):
     def posts(self):
         from collections import OrderedDict
 
-        post = OrderedDict([])
+        posts = OrderedDict([])
         for page, raw in self.raw.items():
             # process posts
             for _, post_raw in raw['data']['__R'].items():
                 if 'pid' in post_raw:  # posts
-                    post[post_raw['lou']] = Post(post_raw['pid'], session=self.session)
+                    posts[post_raw['lou']] = Post(post_raw['pid'], session=self.session)
                 else:
-                    post[post_raw['lou']] = Post(None, session=self.session)
+                    posts[post_raw['lou']] = Post(None, session=self.session)
 
-        assert post[0].pid == 0, 'Unknown error.'
-        post[0] = self
+        assert posts[0].pid == 0, 'Unknown error.'
+        posts[0] = self
 
-        return post
+        return posts

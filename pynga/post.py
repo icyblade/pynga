@@ -1,5 +1,3 @@
-from functools import lru_cache
-
 from pynga.default_config import HOST
 from pynga.user import User
 
@@ -19,7 +17,6 @@ class Post(object):
         return f'<pynga.posts.Post, pid={self.pid}>'
 
     @property
-    @lru_cache(1)
     def raw(self):
         return self.session.get_json(f'{HOST}/read.php?pid={self.pid}&lite=js')
 
@@ -62,6 +59,8 @@ class Post(object):
             加分声望值.
         info: str. (Default: '')
             加分说明.
+        options: list of str. (Default: None)
+            加分相关选项.
         """
         value_mapping = {
             15: 16,

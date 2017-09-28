@@ -2,6 +2,8 @@ import json
 
 import requests
 from bs4 import BeautifulSoup
+from cachecontrol import CacheControlAdapter
+from cachecontrol.heuristics import ExpiresAfter
 
 NGA_JSON_SHIFT = len('window.script_muti_get_var_store=')
 
@@ -19,9 +21,13 @@ class Session(object):
         elif max_retries < 1:
             raise ValueError('max_retries should be greater or equal to 1.')
 
-        # mount retries adapter
         session = requests.Session()
+
+        # mount retries adapter
         session.mount('http://', HTTPAdapter(max_retries=max_retries))
+
+        # mount cache adapter
+        session.mount('http://', CacheControlAdapter(heuristic=ExpiresAfter(hours=1)))
 
         # update authentication
         if isinstance(authentication, dict):
