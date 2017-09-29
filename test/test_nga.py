@@ -1,3 +1,5 @@
+import pytest
+
 from pynga import NGA
 
 AUTHENTICATION = {'uid': 42099452, 'cid': 'Z8gabrmhdt8j87am7dht5adhenps6sq801kc9gbl'}
@@ -25,6 +27,11 @@ def test_user():
     nga = NGA(AUTHENTICATION)
     user = nga.User(42099452)
     assert user.username == 'pynga_test_01'
+    user._validate_current_user()
+
+    user = nga.User(5780720)
+    with pytest.raises(RuntimeError, message='Only current user can use this method.'):
+        user._validate_current_user()
 
 
 def test_post():

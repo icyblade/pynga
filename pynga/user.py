@@ -40,6 +40,10 @@ class User(object):
             # anonymous user
             pass
 
+    def _validate_current_user(self):
+        if self.session.authentication['uid'] != self.uid:
+            raise RuntimeError('Only current user can use this method.')
+
     def undo_log(self, log_id):  # pragma: no cover
         """撤销操作记录
 
@@ -48,11 +52,26 @@ class User(object):
         log_id: int.
             操作记录 ID.
         """
-        if session.authentication['uid'] != self.uid:
-            raise RuntimeError('Only current user can use this method.')
+        self._validate_current_user()
         json_data = self.session.post_read_json(
             f'{HOST}/nuke.php?__lib=undo&__act=undo&raw=3&logid={log_id}&lite=js',
             {'nouse': 'post'},
+        )
+
+        return json_data
+
+    def buy_item(self, item_id):  # pragma: no cover
+        """从系统商店购买物品.
+
+        Parameters
+        --------
+        item_id: int.
+            物品 ID.
+        """
+        self._validate_current_user()
+        json_data = self.session.post_read_json(
+            f'{HOST}/nuke.php?func=item&act=buy&raw=3&lite=js',
+            {'id': item_id, 'count': 1}
         )
 
         return json_data
