@@ -36,3 +36,11 @@ class User(object):
         else:
             # anonymous user
             pass
+
+    def undo_log(self, log_id):  # pragma: no cover
+        json_data = self.session.post_read_json(
+            f'{HOST}/nuke.php?__lib=undo&__act=undo&raw=3&logid={log_id}&lite=js',
+            {'nouse': 'post'},
+        )
+
+        return json_data
