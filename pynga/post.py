@@ -75,7 +75,7 @@ class Post(object):
                     'reputation': int(alterinfo[0][1:]),  # 声望
                     'rvrc': float(alterinfo[1]),  # 威望
                     'gold': float(alterinfo[2]),  # 金钱
-                    'action_id': int(alterinfo[3]),
+                    'log_id': int(alterinfo[3]),
                     'info': alterinfo[4] if len(alterinfo) == 5 else '',
                 }
             elif action == 'U':  # undo
