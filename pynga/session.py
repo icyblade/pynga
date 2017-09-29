@@ -6,6 +6,8 @@ from cachecontrol import CacheControlAdapter
 from cachecontrol.heuristics import ExpiresAfter
 from urllib3.util.retry import Retry
 
+from pynga.default_config import USER_AGENT
+
 NGA_JSON_SHIFT = len('window.script_muti_get_var_store=')
 
 
@@ -47,6 +49,8 @@ class Session(object):
             pass
         else:
             raise ValueError(f'dict or None expected, found {type(authentication)}.')
+
+        session.headers['User-Agent'] = USER_AGENT
 
         self.session = session
 
