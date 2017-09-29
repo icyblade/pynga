@@ -13,10 +13,11 @@ NGA_JSON_SHIFT = len('window.script_muti_get_var_store=')
 
 class Session(object):
     def __init__(self, authentication=None, max_retries=5, timeout=5):
-        self._build_session(authentication, max_retries)
+        self.authentication = authentication
+        self._build_session(max_retries)
         self.timeout = timeout
 
-    def _build_session(self, authentication, max_retries):
+    def _build_session(self, max_retries):
         from requests.adapters import HTTPAdapter
 
         if not isinstance(max_retries, int):
@@ -35,20 +36,20 @@ class Session(object):
         session.mount('http://', CacheControlAdapter(heuristic=ExpiresAfter(hours=1)))
 
         # update authentication
-        if isinstance(authentication, dict):
-            if 'uid' in authentication and 'cid' in authentication:
+        if isinstance(self.authentication, dict):
+            if 'uid' in self.authentication and 'cid' in self.authentication:
                 session.headers.update({
                     'Cookie': (
-                        f'ngaPassportUid={authentication["uid"]};'
-                        f'ngaPassportCid={authentication["cid"]};'
+                        f'ngaPassportUid={self.authentication["uid"]};'
+                        f'ngaPassportCid={self.authentication["cid"]};'
                     )
                 })
-            if 'username' in authentication and 'password' in authentication:
+            if 'username' in self.authentication and 'password' in self.authentication:
                 raise NotImplementedError('Login with username/password is not implemented yet.')
-        elif authentication is None:
+        elif self.authentication is None:
             pass
         else:
-            raise ValueError(f'dict or None expected, found {type(authentication)}.')
+            raise ValueError(f'dict or None expected, found {type(self.authentication)}.')
 
         session.headers['User-Agent'] = USER_AGENT
 

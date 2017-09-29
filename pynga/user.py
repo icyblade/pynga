@@ -41,6 +41,15 @@ class User(object):
             pass
 
     def undo_log(self, log_id):  # pragma: no cover
+        """撤销操作记录
+
+        Parameters
+        --------
+        log_id: int.
+            操作记录 ID.
+        """
+        if session.authentication['uid'] != self.uid:
+            raise RuntimeError('Only current user can use this method.')
         json_data = self.session.post_read_json(
             f'{HOST}/nuke.php?__lib=undo&__act=undo&raw=3&logid={log_id}&lite=js',
             {'nouse': 'post'},
