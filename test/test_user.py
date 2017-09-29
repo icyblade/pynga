@@ -31,3 +31,9 @@ def test_init():
 
     with pytest.raises(Exception, message='找不到用户'):
         User(uid=99999999, session=session)
+
+
+def test_repr():
+    session = Session()
+    user = User(uid=UID, session=session)
+    assert repr(user) == '<pynga.user.User, uid=42099452>'

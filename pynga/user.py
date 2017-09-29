@@ -11,6 +11,9 @@ class User(object):
             raise ValueError('session should be specified.')
         self._validate_user()
 
+    def __repr__(self):
+        return f'<pynga.user.User, uid={self.uid}>'
+
     def _validate_user(self):
         if self.username is not None:
             json_data = self.session.get_json(f'{HOST}/nuke.php?__lib=ucp&__act=get&lite=js&username={self.username}')
