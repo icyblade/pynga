@@ -75,3 +75,21 @@ class User(object):
         )
 
         return json_data
+
+    def use_item(self, inventory_id, uid):  # pragma: no cover
+        """使用物品
+
+        Parameters
+        --------
+        inventory_id: int.
+            仓库内物品 ID.
+        uid: int.
+            目标 UID.
+        """
+        self._validate_current_user()
+        json_data = self.session.post_read_json(
+            f'{HOST}/nuke.php?func=item&act=use&raw=3&lite=js',
+            {'id': inventory_id, 'arg': uid}
+        )
+
+        return json_data
