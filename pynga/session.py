@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from cachecontrol import CacheControlAdapter
 from cachecontrol.heuristics import ExpiresAfter
+from urllib3.util.retry import Retry
 
 NGA_JSON_SHIFT = len('window.script_muti_get_var_store=')
 
@@ -24,7 +25,9 @@ class Session(object):
         session = requests.Session()
 
         # mount retries adapter
-        session.mount('http://', HTTPAdapter(max_retries=max_retries))
+        session.mount('http://', HTTPAdapter(max_retries=Retry(
+            total=max_retries, method_whitelist=frozenset(['GET', 'POST'])
+        )))
 
         # mount cache adapter
         session.mount('http://', CacheControlAdapter(heuristic=ExpiresAfter(hours=1)))
