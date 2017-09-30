@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # pynga documentation build configuration file, created by
-# sphinx-quickstart on Fri Sep 29 17:30:59 2017.
+# sphinx-quickstart on Sat Sep 30 10:50:43 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -31,7 +31,8 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc']
+extensions = ['sphinx.ext.autodoc',
+    'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -55,7 +56,7 @@ author = 'Icyblade Dai'
 # built documents.
 #
 # The short X.Y version.
-version = '2.0.0'
+version = '2.0'
 # The full version, including alpha/beta/rc tags.
 release = '2.0.0'
 
@@ -95,21 +96,6 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-#
-# This is required for the alabaster theme
-# refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
-        'donate.html',
-    ]
-}
 
 
 # -- Options for HTMLHelp output ------------------------------------------
