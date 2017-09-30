@@ -5,6 +5,7 @@ Welcome to pynga's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   pynga
 
 Indices and tables
 ==================
