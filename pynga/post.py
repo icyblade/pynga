@@ -28,6 +28,8 @@ class Post(object):
             uid = int(self.raw['data']['__R']['0']['authorid'])
         except KeyError:
             uid = None
+        if uid == -1:  # anonymous user
+            uid = None
         return User(uid=uid, session=self.session)
 
     @property

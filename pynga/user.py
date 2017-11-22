@@ -18,6 +18,9 @@ class User(object):
         return self.uid == user.uid
 
     def _validate_user(self):
+        if self.uid == -1:  # anonymous user
+            self.uid = None
+
         if self.username is not None:
             json_data = self.session.get_json(f'{HOST}/nuke.php?__lib=ucp&__act=get&lite=js&username={self.username}')
 

@@ -45,3 +45,11 @@ def test_eq():
     another_user = User(uid=58, session=session)
     assert user == user
     assert user != another_user
+
+
+def test_anonymous_user():
+    session = Session()
+    user = User(uid=-1, session=session)
+    assert user.uid is None
+    user = User(uid=None, session=session)
+    assert user.uid is None
