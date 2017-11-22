@@ -14,6 +14,9 @@ class User(object):
     def __repr__(self):
         return f'<pynga.user.User, uid={self.uid}>'
 
+    def __eq__(self, user):
+        return self.uid == user.uid
+
     def _validate_user(self):
         if self.username is not None:
             json_data = self.session.get_json(f'{HOST}/nuke.php?__lib=ucp&__act=get&lite=js&username={self.username}')

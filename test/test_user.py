@@ -37,3 +37,11 @@ def test_repr():
     session = Session()
     user = User(uid=UID, session=session)
     assert repr(user) == '<pynga.user.User, uid=42099452>'
+
+
+def test_eq():
+    session = Session()
+    user = User(uid=UID, session=session)
+    another_user = User(uid=58, session=session)
+    assert user == user
+    assert user != another_user
