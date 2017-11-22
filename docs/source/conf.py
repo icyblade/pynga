@@ -156,6 +156,3 @@ texinfo_documents = [
      author, 'pynga', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
