@@ -39,11 +39,12 @@ def test_repr():
     assert repr(user) == '<pynga.user.User, uid=42099452>'
 
 
-def test_eq():
+def test_operator():
     session = Session()
     user = User(uid=UID, session=session)
+    same_user = User(uid=UID, session=session)
     another_user = User(uid=58, session=session)
-    assert user == user
+    assert user == same_user
     assert user != another_user
 
 

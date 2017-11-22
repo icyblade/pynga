@@ -69,3 +69,12 @@ def test_alterinfo():
         {'action': 'A', 'reputation': 15, 'rvrc': 0.1, 'gold': 0.15, 'log_id': 12258960, 'info': 'pynga_test'},
         {'action': 'U', 'reputation': -15, 'rvrc': -0.1, 'gold': -0.15},
     ]
+
+
+def test_operator():
+    session = Session()
+    post = Post(PID, session=session)
+    same_post = Post(PID, session=session)
+    another_post = Post(138966430, session=session)
+    assert post == same_post
+    assert post != another_post

@@ -18,6 +18,12 @@ class Post(object):
     def __repr__(self):
         return f'<pynga.posts.Post, pid={self.pid}>'
 
+    def __eq__(self, other):
+        return self.pid == other.pid
+
+    def __ne__(self, other):
+        return self.pid != other.pid
+
     @property
     def raw(self):
         return self.session.get_json(f'{HOST}/read.php?pid={self.pid}&lite=js')

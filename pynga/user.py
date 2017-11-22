@@ -14,8 +14,11 @@ class User(object):
     def __repr__(self):
         return f'<pynga.user.User, uid={self.uid}>'
 
-    def __eq__(self, user):
-        return self.uid == user.uid
+    def __eq__(self, other):
+        return self.uid == other.uid
+
+    def __ne__(self, other):
+        return self.uid != other.uid
 
     def _validate_user(self):
         if self.uid == -1:  # anonymous user
