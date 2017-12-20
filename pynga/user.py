@@ -20,6 +20,28 @@ class User(object):
     def __ne__(self, other):
         return self.uid != other.uid
 
+    @property
+    def sign(self):
+        json_data = self.session.post_read_json(
+            f'{HOST}/nuke.php',
+            {'__lib': 'set_sign', '__act': 'get', 'uid': self.uid, 'lite': 'js'}
+        )
+
+        return json_data['data']['0']
+
+    @sign.setter
+    def sign(self, value):
+        json_data = self.session.post_read_json(
+            f'{HOST}/nuke.php',
+            {
+                '__lib': 'set_sign', '__act': 'set',
+                'uid': self.uid, 'lite': 'js', 'sign': value,
+                'disable': '',
+            }
+        )
+
+        assert json_data['data']['0'] == '操作成功'
+
     def _validate_user(self):
         if self.uid == -1:  # anonymous user
             self.uid = None

@@ -1,3 +1,5 @@
+from random import random
+
 import pytest
 
 from pynga.session import Session
@@ -5,6 +7,7 @@ from pynga.user import User
 
 UID = 42099452
 USERNAME = 'pynga_test_01'
+AUTHENTICATION = {'uid': 42099452, 'cid': 'Z8gabrmhdt8j87am7dht5adhenps6sq801kc9gbl'}
 
 
 def test_init():
@@ -54,3 +57,11 @@ def test_anonymous_user():
     assert user.uid is None
     user = User(uid=None, session=session)
     assert user.uid is None
+
+
+def test_sign():
+    session = Session({'uid': AUTHENTICATION['uid'], 'cid': AUTHENTICATION['cid']})
+    user = User(uid=42099452, session=session)
+    sign = f'this is a test sign {random()}'
+    user.sign = sign
+    assert user.sign == sign
