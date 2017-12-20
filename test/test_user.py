@@ -62,6 +62,6 @@ def test_anonymous_user():
 def test_sign():
     session = Session({'uid': AUTHENTICATION['uid'], 'cid': AUTHENTICATION['cid']})
     user = User(uid=42099452, session=session)
-    sign = f'this is a test sign {random()}'
+    sign = f'中文测试签名 {random()}'
     user.sign = sign
     assert user.sign == sign

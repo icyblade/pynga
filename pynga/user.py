@@ -35,7 +35,7 @@ class User(object):
             f'{HOST}/nuke.php',
             {
                 '__lib': 'set_sign', '__act': 'set',
-                'uid': self.uid, 'lite': 'js', 'sign': value,
+                'uid': self.uid, 'lite': 'js', 'sign': value.encode('gbk'),
                 'disable': '',
             }
         )
