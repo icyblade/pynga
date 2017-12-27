@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import pytz
+
 from pynga.default_config import HOST
 
 
@@ -37,7 +39,7 @@ class User(object):
             )
 
             timestamp = json_data['data']['0']['regdate']
-            register_date = datetime.fromtimestamp(timestamp, tz=None)
+            register_date = datetime.fromtimestamp(timestamp, tz=pytz.timezone('Asia/Shanghai'))
 
             return register_date
 
