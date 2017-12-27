@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pynga.default_config import HOST
 
 
@@ -19,6 +21,18 @@ class User(object):
 
     def __ne__(self, other):
         return self.uid != other.uid
+
+    @property
+    def register_date(self):
+        json_data = self.session.post_read_json(
+            f'{HOST}/nuke.php',
+            {'__lib': 'ucp', '__act': 'get', 'lite': 'js', 'uid': self.uid}
+        )
+
+        timestamp = json_data['data']['0']['regdate']
+        register_date = datetime.fromtimestamp(timestamp)
+
+        return register_date
 
     @property
     def sign(self):

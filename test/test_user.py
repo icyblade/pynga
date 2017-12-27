@@ -1,3 +1,4 @@
+from datetime import datetime
 from random import random
 
 import pytest
@@ -65,3 +66,9 @@ def test_sign():
     sign = f'中文测试签名 {random()}'
     user.sign = sign
     assert user.sign == sign
+
+
+def test_register_date():
+    session = Session()
+    user = User(uid=UID, session=session)
+    assert user.register_date == datetime(2017, 9, 19, 10, 21, 30)
