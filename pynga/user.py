@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytz
 
-from pynga.default_config import HOST
+from pynga.default_config import HOST, TIMEZONE
 
 
 class User(object):
@@ -28,6 +28,20 @@ class User(object):
     def is_anonymous(self):
         return self.uid is None
 
+    def _timestamp_to_datetime(self, timestamp):
+        """在 UTC+8 时区下，将时间戳转化为无 tz 的 datetime 对象.
+
+        Parameters
+        --------
+        timestamp: int.
+
+        Returns
+        --------
+        dt: instance of datetime.datetime.
+        """
+        dt = datetime.fromtimestamp(timestamp, tz=pytz.timezone(TIMEZONE)).replace(tzinfo=None)
+        return dt
+
     @property
     def register_date(self):
         if self.is_anonymous:
@@ -39,7 +53,7 @@ class User(object):
             )
 
             timestamp = json_data['data']['0']['regdate']
-            register_date = datetime.fromtimestamp(timestamp, tz=pytz.timezone('Asia/Shanghai'))
+            register_date = self._timestamp_to_datetime(int(timestamp))
 
             return register_date
 
