@@ -55,9 +55,9 @@ def test_operator():
 def test_anonymous_user():
     session = Session()
     user = User(uid=-1, session=session)
-    assert user.uid is None
+    assert user.is_anonymous
     user = User(uid=None, session=session)
-    assert user.uid is None
+    assert user.is_anonymous
 
 
 def test_sign():
@@ -67,8 +67,14 @@ def test_sign():
     user.sign = sign
     assert user.sign == sign
 
+    user = User(uid=-1, session=session)
+    assert user.sign is None
+
 
 def test_register_date():
     session = Session()
     user = User(uid=UID, session=session)
     assert user.register_date == datetime(2017, 9, 19, 10, 21, 30)
+
+    user = User(uid=-1, session=session)
+    assert user.register_date is None

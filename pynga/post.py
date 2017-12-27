@@ -34,8 +34,6 @@ class Post(object):
             uid = int(self.raw['data']['__R']['0']['authorid'])
         except KeyError:
             uid = None
-        if uid == -1:  # anonymous user
-            uid = None
         return User(uid=uid, session=self.session)
 
     @property
@@ -95,7 +93,7 @@ class Post(object):
                     'gold': float(alterinfo[2]),  # 金钱
                 }
             else:
-                raise ValueError(f'Invalid action: {action}')
+                raise NotImplementedError(f'Invalid action: {action}')
 
     def add_point(self, value, info='', options=None):  # pragma: no cover
         """回复加分接口

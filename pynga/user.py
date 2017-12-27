@@ -23,38 +23,49 @@ class User(object):
         return self.uid != other.uid
 
     @property
+    def is_anonymous(self):
+        return self.uid is None
+
+    @property
     def register_date(self):
-        json_data = self.session.post_read_json(
-            f'{HOST}/nuke.php',
-            {'__lib': 'ucp', '__act': 'get', 'lite': 'js', 'uid': self.uid}
-        )
+        if self.is_anonymous:
+            return None
+        else:
+            json_data = self.session.post_read_json(
+                f'{HOST}/nuke.php',
+                {'__lib': 'ucp', '__act': 'get', 'lite': 'js', 'uid': self.uid}
+            )
 
-        timestamp = json_data['data']['0']['regdate']
-        register_date = datetime.fromtimestamp(timestamp)
+            timestamp = json_data['data']['0']['regdate']
+            register_date = datetime.fromtimestamp(timestamp, tz=None)
 
-        return register_date
+            return register_date
 
     @property
     def sign(self):
-        json_data = self.session.post_read_json(
-            f'{HOST}/nuke.php',
-            {'__lib': 'set_sign', '__act': 'get', 'uid': self.uid, 'lite': 'js'}
-        )
+        if self.is_anonymous:
+            return None
+        else:
+            json_data = self.session.post_read_json(
+                f'{HOST}/nuke.php',
+                {'__lib': 'set_sign', '__act': 'get', 'uid': self.uid, 'lite': 'js'}
+            )
 
-        return json_data['data']['0']
+            return json_data['data']['0']
 
     @sign.setter
     def sign(self, value):
-        json_data = self.session.post_read_json(
-            f'{HOST}/nuke.php',
-            {
-                '__lib': 'set_sign', '__act': 'set',
-                'uid': self.uid, 'lite': 'js', 'sign': value.encode('gbk'),
-                'disable': '',
-            }
-        )
+        if not self.is_anonymous:
+            json_data = self.session.post_read_json(
+                f'{HOST}/nuke.php',
+                {
+                    '__lib': 'set_sign', '__act': 'set',
+                    'uid': self.uid, 'lite': 'js', 'sign': value.encode('gbk'),
+                    'disable': '',
+                }
+            )
 
-        assert json_data['data']['0'] == '操作成功'
+            assert json_data['data']['0'] == '操作成功'
 
     def _validate_user(self):
         if self.uid == -1:  # anonymous user
