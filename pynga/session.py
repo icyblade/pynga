@@ -18,8 +18,6 @@ class Session(object):
         self.timeout = timeout
 
     def _build_session(self, max_retries):
-        from requests.adapters import HTTPAdapter
-
         if not isinstance(max_retries, int):
             raise ValueError(f'int expected, found {type(max_retries)}.')
         elif max_retries < 1:
@@ -27,13 +25,16 @@ class Session(object):
 
         session = requests.Session()
 
-        # mount retries adapter
-        session.mount('http://', HTTPAdapter(max_retries=Retry(
-            total=max_retries, method_whitelist=frozenset(['GET', 'POST'])
-        )))
-
-        # mount cache adapter
-        session.mount('http://', CacheControlAdapter(heuristic=ExpiresAfter(hours=1)))
+        # mount cache adapter with retries
+        session.mount(
+            'http://',
+            CacheControlAdapter(
+                max_retries=Retry(
+                    total=max_retries, method_whitelist=frozenset(['GET', 'POST'])
+                ),
+                heuristic=ExpiresAfter(hours=1)
+            )
+        )
 
         # update authentication
         if isinstance(self.authentication, dict):
