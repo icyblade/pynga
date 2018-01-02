@@ -117,7 +117,7 @@ class User(object):
             raise RuntimeError('Only current user can use this method.')
 
     def undo_log(self, log_id):  # pragma: no cover
-        """撤销操作记录
+        """撤销操作记录.
 
         Parameters
         --------
@@ -149,7 +149,7 @@ class User(object):
         return json_data
 
     def use_item(self, inventory_id, uid):  # pragma: no cover
-        """使用物品
+        """使用物品.
 
         Parameters
         --------

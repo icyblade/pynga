@@ -8,6 +8,16 @@ from pynga.user import User
 
 
 class NGA(object):
+    """NGA 基础类.
+
+    Parameters
+    --------
+    authentication: dict.
+        支持的 key 包括 uid, username, cid.
+    max_retries: int. (Default: 5)
+        请求最多重试的次数.
+    """
+
     def __init__(self, authentication=None, max_retries=5):
         self.session = Session(authentication, max_retries)
         self._set_current_user()
@@ -35,10 +45,47 @@ class NGA(object):
         return {'uid': uid, 'username': username}
 
     def User(self, uid=None, username=None):
+        """定义一个 NGA 用户.
+
+        用户的 uid 和 username 至少需要指定一个, 否则是匿名用户.
+
+        Parameters
+        --------
+        uid: int. (Default: None)
+            用户的 UID.
+        username: string. (Default: None)
+            用户的用户名.
+
+        Returns
+        --------
+        user: instance of pynga.user.User.
+        """
         return User(uid=uid, username=username, session=self.session)
 
     def Post(self, pid):
+        """定义一个回复.
+
+        Parameters
+        --------
+        pid: int.
+            回复的 PID.
+
+        Returns
+        --------
+        post: instance of pynga.post.Post.
+        """
         return Post(pid, session=self.session)
 
     def Thread(self, tid):
+        """定义一个帖子.
+
+        Parameters
+        --------
+        tid: int.
+            回复的 TID.
+
+        Returns
+        --------
+        thread: instance of pynga.thread.Thread.
+        """
         return Thread(tid, session=self.session)

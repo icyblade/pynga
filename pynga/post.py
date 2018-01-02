@@ -108,7 +108,7 @@ class Post(object):
                 raise NotImplementedError(f'Invalid action: {action}')
 
     def add_point(self, value, info='', options=None):  # pragma: no cover
-        """回复加分接口
+        """回复加分接口.
 
         Parameters
         --------
@@ -117,7 +117,7 @@ class Post(object):
         info: str. (Default: '')
             加分说明.
         options: list of str. (Default: None)
-            加分相关选项.
+            加分相关选项. 可选项包括: 增加/扣除金钱, 增加威望, 给作者发送PM, 主题加入精华区.
         """
         value_mapping = {
             15: 16,
