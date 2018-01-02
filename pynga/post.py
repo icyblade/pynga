@@ -24,6 +24,18 @@ class Post(object):
     def __ne__(self, other):
         return self.pid != other.pid
 
+    def __le__(self, other):
+        return self.pid <= other.pid
+
+    def __ge__(self, other):
+        return self.pid >= other.pid
+
+    def __lt__(self, other):
+        return self.pid < other.pid
+
+    def __gt__(self, other):
+        return self.pid >= other.pid
+
     @property
     def raw(self):
         return self.session.get_json(f'{HOST}/read.php?pid={self.pid}&lite=js')

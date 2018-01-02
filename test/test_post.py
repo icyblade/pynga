@@ -78,3 +78,9 @@ def test_operator():
     another_post = Post(138966430, session=session)
     assert post == same_post
     assert post != another_post
+    assert post > another_post
+    assert post >= another_post
+    assert post >= same_post
+    assert another_post < post
+    assert another_post <= post
+    assert post <= same_post
