@@ -1,0 +1,14 @@
+name: conda_with_python_3.6
+channels:
+ - conda-forge
+ - anaconda
+dependencies:
+ - pip:
+   - sphinx-autodoc-typehints
+   - sphinx-autodoc-annotation
+ - python=3.6
+ - requests
+ - cachecontrol
+ - beautifulsoup4
+ - urllib3
+ - pytz
