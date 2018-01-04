@@ -65,3 +65,31 @@ class Thread(object):
         posts[0] = self
 
         return posts
+
+    def move(self, target_forum, pm=True, pm_message=''):  # pragma: no cover
+        """移动帖子.
+
+        Parameters
+        --------
+        target_forum: instance of pynga.forum.Forum.
+            目标版面.
+        pm: bool. (Default: True)
+            是否 PM.
+        pm_message: str. (Default: '')
+            PM 消息内容.
+
+        Returns
+        --------
+        json_data: dict.
+            Response in JSON dict.
+        """
+        post_data = {
+            '__lib': 'topic_move', '__act': 'move',
+            'tid': self.tid, 'fid': target_forum.fid, 'stid': '',
+            'pm': int(pm), 'info': pm_message,
+            'op': '', 'delay': '', 'raw': 3, 'lite': 'js',
+        }
+
+        json_data = self.session.post_read_json(f'{HOST}/nuke.php', post_data)
+
+        return json_data
