@@ -3,12 +3,13 @@ channels:
  - conda-forge
  - anaconda
 dependencies:
- - pip:
-   - sphinx-autodoc-typehints
-   - sphinx-autodoc-annotation
  - python=3.6
  - requests
  - cachecontrol
  - beautifulsoup4
  - urllib3
  - pytz
+ - pip:
+   - sphinx-autodoc-typehints
+   - sphinx-autodoc-annotation
+   - git+https://github.com/icyblade/pynga.git
