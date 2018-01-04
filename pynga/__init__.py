@@ -1,6 +1,7 @@
 import re
 
 from pynga.default_config import HOST
+from pynga.forum import Forum
 from pynga.post import Post
 from pynga.session import Session
 from pynga.thread import Thread
@@ -82,10 +83,24 @@ class NGA(object):
         Parameters
         --------
         tid: int.
-            回复的 TID.
+            帖子的 TID.
 
         Returns
         --------
         thread: instance of pynga.thread.Thread.
         """
         return Thread(tid, session=self.session)
+
+    def Forum(self, fid):
+        """定义一个版面.
+
+        Parameters
+        --------
+        fid: int.
+            版面的 FID.
+
+        Returns
+        --------
+        forum: instance of pynga.forum.Forum.
+        """
+        return Forum(fid, session=self.session)

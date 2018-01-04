@@ -44,3 +44,8 @@ def test_thread():
     nga = NGA(AUTHENTICATION)
     thread = nga.Thread(7384678)
     assert thread.user.username == 'icyblade'
+
+
+def test_forum():
+    nga = NGA(AUTHENTICATION)
+    nga.Forum(335)
