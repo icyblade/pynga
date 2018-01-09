@@ -1,8 +1,10 @@
+import json
 from datetime import datetime
+from urllib.parse import quote
 
 import pytz
 
-from pynga.default_config import HOST, TIMEZONE
+from pynga.default_config import ADMIN_LOG_TYPE_MAPPER, HOST, TIMEZONE
 
 
 class User(object):
@@ -14,6 +16,9 @@ class User(object):
         else:
             raise ValueError('session should be specified.')
         self._validate_user()
+
+    def __hash__(self):
+        return self.uid.__hash__()
 
     def __repr__(self):
         return f'<pynga.user.User, uid={self.uid}>'
@@ -28,7 +33,8 @@ class User(object):
     def is_anonymous(self):
         return self.uid is None
 
-    def _timestamp_to_datetime(self, timestamp):
+    @staticmethod
+    def _timestamp_to_datetime(timestamp):
         """在 UTC+8 时区下，将时间戳转化为无 tz 的 datetime 对象.
 
         Parameters
@@ -88,7 +94,9 @@ class User(object):
             self.uid = None
 
         if self.username is not None:
-            json_data = self.session.get_json(f'{HOST}/nuke.php?__lib=ucp&__act=get&lite=js&username={self.username}')
+            json_data = self.session.get_json(
+                f'{HOST}/nuke.php?__lib=ucp&__act=get&lite=js&username={quote(self.username.encode("gbk"))}'
+            )
 
             # extract uid
             if 'error' in json_data:
@@ -115,6 +123,40 @@ class User(object):
     def _validate_current_user(self):
         if self.session.authentication['uid'] != self.uid:
             raise RuntimeError('Only current user can use this method.')
+
+    def get_admin_log(self, type=None):  # pragma: no cover
+        """获取当前用户的操作记录.
+
+
+        Yields
+        --------
+        log: instance of pynga.user.AdminLog.
+        """
+        id = None
+        if type is None:
+            id = ''
+        else:
+            for type_id, type_name in ADMIN_LOG_TYPE_MAPPER.items():
+                if type_name == type:
+                    id = type_id
+                    break
+        if id is None:
+            raise ValueError(f'Unknown admin type {type}.')
+
+        page = 1
+        while True:
+            json_data = self.session.post_read_json(
+                f'{HOST}/nuke.php?__lib=admin_log_search&__act=search&from={self.uid}&to=&id=&lite=js',
+                {'type': id, 'about': '', 'raw': 3, 'page': page},
+            )
+
+            if not len(json_data['data']['0']):
+                break
+
+            for _, raw in json_data['data']['0'].items():
+                yield AdminLog(json.dumps(raw), json_data['data']['2'])
+
+            page += 1
 
     def undo_admin_log(self, log_id):  # pragma: no cover
         """撤销操作记录.
@@ -165,3 +207,56 @@ class User(object):
         )
 
         return json_data
+
+
+class AdminLog(object):
+    """操作记录.
+
+    Parameters
+    --------
+    data: str
+        JSON data represented in str. For example: {
+            "0": log_id,
+            "1": type,
+            "2": source_uid,
+            "3": target_uid,
+            "4": tid,
+            "5": admin_log_message,
+            "6": timestamp,
+        }
+    """
+    def __init__(self, data, admin_log_type_mapper=ADMIN_LOG_TYPE_MAPPER):
+        self.raw = data
+        self.raw_json = json.loads(self.raw)
+        self.admin_log_type_mapper = admin_log_type_mapper
+
+    def __repr__(self):
+        return f'<pynga.user.AdminLog, id={self.log_id}>'
+
+    @property
+    def log_id(self):
+        return int(self.raw_json['0'])
+
+    @property
+    def type(self):
+        return self.admin_log_type_mapper[str(self.raw_json['1'])]
+
+    @property
+    def source_uid(self):
+        return int(self.raw_json['2'])
+
+    @property
+    def target_uid(self):
+        return int(self.raw_json['3'])
+
+    @property
+    def tid(self):
+        return int(self.raw_json['4'])
+
+    @property
+    def message(self):
+        return self.raw_json['5']
+
+    @property
+    def time(self):
+        return User._timestamp_to_datetime(self.raw_json['6'])

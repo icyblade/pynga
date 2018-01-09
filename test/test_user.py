@@ -78,3 +78,9 @@ def test_register_date():
 
     user = User(uid=-1, session=session)
     assert user.register_date is None
+
+
+def test_chinese_username():
+    session = Session()
+    user = User(username='清风善堂', session=session)
+    assert user.uid == 1742851
