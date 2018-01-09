@@ -17,7 +17,7 @@ setup(
         'cachecontrol>=0.12.0',
         'beautifulsoup4>=4.0.0',
         'urllib3>=1.18',
-        'pytz',
+        'pytz>=2017.2',
     ],
     tests_require=[
         'pytest'
