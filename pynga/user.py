@@ -158,17 +158,17 @@ class User(object):
 
             page += 1
 
-    def undo_admin_log(self, log_id):  # pragma: no cover
+    def undo_admin_log(self, admin_log):  # pragma: no cover
         """撤销操作记录.
 
         Parameters
         --------
-        log_id: int.
-            操作记录 ID.
+        admin_log: instance of pynga.user.AdminLog
+            需要撤销的操作记录.
         """
         self._validate_current_user()
         json_data = self.session.post_read_json(
-            f'{HOST}/nuke.php?__lib=undo&__act=undo&raw=3&logid={log_id}&lite=js',
+            f'{HOST}/nuke.php?__lib=undo&__act=undo&raw=3&logid={admin_log.log_id}&lite=js',
             {'nouse': 'post'},
         )
 
