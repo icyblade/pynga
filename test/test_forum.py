@@ -5,6 +5,7 @@ from pynga.session import Session
 from pynga.thread import Thread
 
 FID = 335
+AUTHENTICATION = {'uid': 42099452, 'cid': 'Z8gabrmhdt8j87am7dht5adhenps6sq801kc9gbl'}
 
 
 def test_init():
@@ -22,7 +23,7 @@ def test_repr():
 
 
 def test_threads():
-    session = Session()
+    session = Session(AUTHENTICATION)
     forum = Forum(FID, session=session, page_limit=2)
 
     assert 8135880 in forum.threads.keys()

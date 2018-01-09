@@ -4,6 +4,8 @@ import pytest
 
 from pynga.session import Session
 
+AUTHENTICATION = {'uid': 42099452, 'cid': 'Z8gabrmhdt8j87am7dht5adhenps6sq801kc9gbl'}
+
 
 def test_init():
     # test plain session
@@ -25,7 +27,7 @@ def test_init():
 
 
 def test_http_get():
-    session = Session()
+    session = Session(AUTHENTICATION)
 
     text = session.get_text('http://bbs.ngacn.cc/thread.php?fid=7')
     regex_result = re.findall('<title>([\S\s]+?)</title>', text)

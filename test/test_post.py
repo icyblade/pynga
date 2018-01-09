@@ -4,6 +4,7 @@ from pynga.post import Post
 from pynga.session import Session
 
 PID = 138966442
+AUTHENTICATION = {'uid': 42099452, 'cid': 'Z8gabrmhdt8j87am7dht5adhenps6sq801kc9gbl'}
 
 
 def test_init():
@@ -20,7 +21,7 @@ def test_repr():
 
 
 def test_user():
-    session = Session()
+    session = Session(AUTHENTICATION)
     post = Post(PID, session=session)
     assert post.user.username == 'icyblade'
 
@@ -30,7 +31,7 @@ def test_user():
 
 
 def test_subject():
-    session = Session()
+    session = Session(AUTHENTICATION)
     post = Post(PID, session=session)
     assert post.subject == 'test'
 
@@ -39,7 +40,7 @@ def test_subject():
 
 
 def test_content():
-    session = Session()
+    session = Session(AUTHENTICATION)
     post = Post(PID, session=session)
     assert post.content == '占楼占楼占楼占楼占楼占楼占楼占楼<br/>备用楼'
 
@@ -48,19 +49,19 @@ def test_content():
 
 
 def test_tid():
-    session = Session()
+    session = Session(AUTHENTICATION)
     post = Post(PID, session=session)
     assert post.tid == 7384678
 
 
 def test_fid():
-    session = Session()
+    session = Session(AUTHENTICATION)
     post = Post(PID, session=session)
     assert post.fid == 188
 
 
 def test_alterinfo():
-    session = Session()
+    session = Session(AUTHENTICATION)
     post = Post(PID, session=session)
     assert list(post.alterinfo) == [
         {'action': 'E', 'edit_timestamp': 1506041993},

@@ -5,6 +5,7 @@ from pynga.session import Session
 from pynga.thread import Thread
 
 TID = 7384678
+AUTHENTICATION = {'uid': 42099452, 'cid': 'Z8gabrmhdt8j87am7dht5adhenps6sq801kc9gbl'}
 
 
 def test_init():
@@ -20,31 +21,31 @@ def test_repr():
 
 
 def test_n_pages():
-    session = Session()
+    session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
     assert thread.n_pages == 6
 
 
 def test_user():
-    session = Session()
+    session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
     assert thread.user.username == 'icyblade'
 
 
 def test_subject():
-    session = Session()
+    session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
     assert thread.subject == '[深渊测试团][副本] 6.0 普通/英雄级别团队副本攻略 ---- 悬槌堡'
 
 
 def test_content():
-    session = Session()
+    session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
     assert thread.content.find('悬槌堡是高里亚帝国的权力核心') != -1
 
 
 def test_post():
-    session = Session()
+    session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
     assert isinstance(thread.posts[0], Thread)
     for i in range(1, len(thread.posts)):
