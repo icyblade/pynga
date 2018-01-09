@@ -24,6 +24,7 @@ def test_init():
 
     user = User(username=USERNAME, session=session)
     assert user.uid == 42099452
+    assert user.__hash__() == UID.__hash__()
 
     User(uid=UID, username=USERNAME, session=session)
 
