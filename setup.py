@@ -12,5 +12,15 @@ setup(
     classifiers=[
         'Programming Language :: Python :: 3.6',
     ],
+    install_requires=[
+        'requests>=2.10.0',
+        'cachecontrol>=0.12.0',
+        'beautifulsoup4>=4.0.0',
+        'urllib3>=1.18',
+        'pytz',
+    ],
+    tests_require=[
+        'pytest'
+    ],
     python_requires='>=3.6',
 )
