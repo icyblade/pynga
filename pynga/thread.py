@@ -85,7 +85,7 @@ class Thread(object):
         json_data: dict.
             Response in JSON dict.
         """
-        if push:
+        if not push:
             op = 2048
         else:
             op = ''
