@@ -66,7 +66,7 @@ class Thread(object):
 
         return posts
 
-    def move(self, target_forum, pm=True, pm_message=''):  # pragma: no cover
+    def move(self, target_forum, pm=True, pm_message='', push=True):  # pragma: no cover
         """移动帖子.
 
         Parameters
@@ -77,17 +77,23 @@ class Thread(object):
             是否 PM.
         pm_message: str. (Default: '')
             PM 消息内容.
+        push: bool. (Default: True)
+            是否提前帖子.
 
         Returns
         --------
         json_data: dict.
             Response in JSON dict.
         """
+        if push:
+            op = 2048
+        else:
+            op = ''
         post_data = {
             '__lib': 'topic_move', '__act': 'move',
             'tid': self.tid, 'fid': target_forum.fid, 'stid': '',
             'pm': int(pm), 'info': pm_message,
-            'op': '', 'delay': '', 'raw': 3, 'lite': 'js',
+            'op': op, 'delay': '', 'raw': 3, 'lite': 'js',
         }
 
         json_data = self.session.post_read_json(f'{HOST}/nuke.php', post_data)
