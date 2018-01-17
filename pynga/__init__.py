@@ -1,7 +1,7 @@
 import re
 
 from pynga.default_config import HOST
-from pynga.forum import Forum
+from pynga.forum import Forum, SubForum
 from pynga.post import Post
 from pynga.session import Session
 from pynga.thread import Thread
@@ -104,3 +104,17 @@ class NGA(object):
         forum: instance of pynga.forum.Forum.
         """
         return Forum(fid, session=self.session)
+
+    def SubForum(self, stid):
+        """定义一个合集.
+
+        Parameters
+        --------
+        stid: int.
+            合集的 STID.
+
+        Returns
+        --------
+        sub_forum: instance of pynga.forum.SubForum.
+        """
+        return SubForum(stid, session=self.session)

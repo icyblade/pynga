@@ -49,3 +49,8 @@ def test_thread():
 def test_forum():
     nga = NGA(AUTHENTICATION)
     nga.Forum(335)
+
+
+def test_sub_forum():
+    nga = NGA(AUTHENTICATION)
+    nga.SubForum(11477435)
