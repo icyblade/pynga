@@ -77,7 +77,7 @@ class NGA(object):
         """
         return Post(pid, session=self.session)
 
-    def Thread(self, tid):
+    def Thread(self, tid, *args, **kwargs):
         """定义一个帖子.
 
         Parameters
@@ -89,7 +89,7 @@ class NGA(object):
         --------
         thread: instance of pynga.thread.Thread.
         """
-        return Thread(tid, session=self.session)
+        return Thread(tid, session=self.session, *args, **kwargs)
 
     def Forum(self, fid):
         """定义一个版面.
