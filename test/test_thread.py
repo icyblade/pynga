@@ -57,3 +57,17 @@ def test_post():
         143426661,
         143467899
     ]
+
+
+def test_alterinfo():
+    session = Session(AUTHENTICATION)
+    thread = Thread(13333884, session=session)
+    expected = {
+        'action': 'A',
+        'gold': 0.3,
+        'info': '',
+        'log_id': 18414555,
+        'reputation': 30,
+        'rvrc': 0.2
+    }
+    assert expected in list(thread.alterinfo)

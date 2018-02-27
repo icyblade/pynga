@@ -1,4 +1,5 @@
 from pynga.default_config import HOST
+from pynga.misc import handle_alterinfo
 from pynga.post import Post
 from pynga.user import User
 
@@ -99,3 +100,8 @@ class Thread(object):
         json_data = self.session.post_read_json(f'{HOST}/nuke.php', post_data)
 
         return json_data
+
+    @property
+    def alterinfo(self):
+        alterinfo_raw = self.raw[1]['data']['__R']['0']['alterinfo']
+        return handle_alterinfo(alterinfo_raw)

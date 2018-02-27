@@ -1,6 +1,5 @@
-import re
-
 from pynga.default_config import HOST
+from pynga.misc import handle_alterinfo
 from pynga.user import User
 
 
@@ -73,39 +72,7 @@ class Post(object):
     @property
     def alterinfo(self):
         alterinfo_raw = self.raw['data']['__R']['0']['alterinfo']
-        alterinfo_extracted = map(
-            lambda x: x.split(' '),
-            re.findall('\[(.+?)\]', alterinfo_raw)
-        )
-        for alterinfo in alterinfo_extracted:
-            action = alterinfo[0][0]
-            if action == 'E':  # edit
-                assert len(alterinfo) == 3
-                assert alterinfo[1] == alterinfo[2] == '0'
-                yield {
-                    'action': action,
-                    'edit_timestamp': int(alterinfo[0][1:])
-                }
-            elif action == 'A':  # add point
-                assert 4 <= len(alterinfo) <= 5
-                yield {
-                    'action': action,
-                    'reputation': int(alterinfo[0][1:]),  # 声望
-                    'rvrc': float(alterinfo[1]),  # 威望
-                    'gold': float(alterinfo[2]),  # 金钱
-                    'log_id': int(alterinfo[3]),
-                    'info': alterinfo[4] if len(alterinfo) == 5 else '',
-                }
-            elif action == 'U':  # undo
-                assert len(alterinfo) == 3
-                yield {
-                    'action': action,
-                    'reputation': int(alterinfo[0][1:]),  # 声望
-                    'rvrc': float(alterinfo[1]),  # 威望
-                    'gold': float(alterinfo[2]),  # 金钱
-                }
-            else:
-                raise NotImplementedError(f'Invalid action: {action}')
+        return handle_alterinfo(alterinfo_raw)
 
     def add_point(self, value, info='', options=None):  # pragma: no cover
         """回复加分接口.
