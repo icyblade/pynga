@@ -5,8 +5,9 @@ from pynga.user import User
 
 
 class Thread(object):
-    def __init__(self, tid, session=None):
+    def __init__(self, tid, session=None, cache_page=float('inf')):
         self.tid = tid
+        self.cache_page = cache_page
         if session is not None:
             self.session = session
         else:
@@ -21,7 +22,7 @@ class Thread(object):
 
         raw_all = {}
         page = 1
-        while True:
+        while page <= self.cache_page:
             raw = self.session.get_json(f'{HOST}/read.php?tid={self.tid}&lite=js&page={page}')
             raw_all[page] = raw
             n_pages = ceil(raw['data']['__ROWS'] / raw['data']['__R__ROWS_PAGE'])

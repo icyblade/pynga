@@ -71,3 +71,9 @@ def test_alterinfo():
         'rvrc': 0.2
     }
     assert expected in list(thread.alterinfo)
+
+
+def test_cache_page():
+    session = Session(AUTHENTICATION)
+    thread = Thread(TID, session=session, cache_page=1)
+    assert thread.n_pages == 1
