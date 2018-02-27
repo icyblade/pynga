@@ -65,8 +65,12 @@ def test_sign():
     session = Session({'uid': AUTHENTICATION['uid'], 'cid': AUTHENTICATION['cid']})
     user = User(uid=42099452, session=session)
     sign = f'中文测试签名 {random()}'
-    user.sign = sign
-    assert user.sign == sign
+    try:
+        user.sign = sign
+        assert user.sign == sign
+    except ValueError as e:
+        if str(e) != '目前不能修改签名':
+            raise e
 
     user = User(uid=-1, session=session)
     assert user.sign is None

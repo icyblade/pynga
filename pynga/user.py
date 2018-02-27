@@ -87,7 +87,10 @@ class User(object):
                 }
             )
 
-            assert json_data['data']['0'] == '操作成功'
+            if 'error' in json_data:
+                raise ValueError(json_data['error']['0'])
+            else:
+                assert json_data['data']['0'] == '操作成功'
 
     def _validate_user(self):
         if self.uid == -1:  # anonymous user
