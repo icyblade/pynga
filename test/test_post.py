@@ -64,7 +64,7 @@ def test_alterinfo():
     session = Session(AUTHENTICATION)
     post = Post(PID, session=session)
     assert list(post.alterinfo) == [
-        {'action': 'E', 'edit_timestamp': 1506041993},
+        {'action': 'E', 'by_uid': '0', 'by_username': '0', 'edit_timestamp': 1506041993},
         {'action': 'A', 'reputation': 15, 'rvrc': 0.1, 'gold': 0.15, 'log_id': 12258940, 'info': ''},
         {'action': 'U', 'reputation': -15, 'rvrc': -0.1, 'gold': -0.15},
         {'action': 'A', 'reputation': 15, 'rvrc': 0.1, 'gold': 0.15, 'log_id': 12258960, 'info': 'pynga_test'},

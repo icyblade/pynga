@@ -43,7 +43,10 @@ class Forum(object):
         for page, raw in self.raw.items():
             # process threads
             for _, thread_raw in raw['data']['__T'].items():
-                threads[thread_raw['tid']] = Thread(thread_raw['tid'], session=self.session)
+                if 'quote_from' in thread_raw and thread_raw['quote_from']:
+                    threads[thread_raw['quote_from']] = Thread(thread_raw['quote_from'], session=self.session)
+                else:
+                    threads[thread_raw['tid']] = Thread(thread_raw['tid'], session=self.session)
 
         return threads
 

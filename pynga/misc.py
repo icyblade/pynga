@@ -19,7 +19,7 @@ def handle_alterinfo(alterinfo_raw):
                 'edit_timestamp': int(alterinfo[0][1:])
             })
         elif action == 'A':  # add point
-            assert 4 <= len(alterinfo) <= 5
+            assert len(alterinfo) in {4, 5}
             result.append({
                 'action': action,
                 'reputation': int(alterinfo[0][1:]),  # 声望
@@ -29,7 +29,7 @@ def handle_alterinfo(alterinfo_raw):
                 'info': alterinfo[4] if len(alterinfo) == 5 else '',
             })
         elif action == 'U':  # undo
-            assert len(alterinfo) == 4
+            assert len(alterinfo) in {3, 4}
             result.append({
                 'action': action,
                 'reputation': int(alterinfo[0][1:]),  # 声望
