@@ -1,9 +1,11 @@
 from setuptools import setup
 
-
 about = {}
 with open('./pynga/__version__.py', 'r') as f:
     exec(f.read(), about)
+
+with open('README.md', 'r') as f:
+    readme = f.read()
 
 tests_require = [
     'pytest>=3.5.0',
@@ -19,6 +21,8 @@ setup(
     author=about['__author__'],
     author_email=about['__author_email__'],
     description=about['__description__'],
+    long_description=readme,
+    long_description_content_type='text/markdown',
     classifiers=[
         'Programming Language :: Python :: 3.6',
     ],
