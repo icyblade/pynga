@@ -65,5 +65,9 @@ data/
 result/
 config/authentication.py
 
+# pytest
+.pytest_cache/
+
 # pycharm
 .idea/
+venv/

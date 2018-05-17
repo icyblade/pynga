@@ -20,7 +20,8 @@ setup(
         'pytz>=2017.2',
     ],
     tests_require=[
-        'pytest'
+        'pytest>=3.5.0',
+        'pytest-flake8>=1.0.0'
     ],
     python_requires='>=3.6',
 )

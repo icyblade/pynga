@@ -4,7 +4,7 @@ from pynga.post import Post
 from pynga.session import Session
 from pynga.thread import Thread
 
-TID = 7384678
+TID = 6406100
 AUTHENTICATION = {'uid': 42099452, 'cid': 'Z8gabrmhdt8j87am7dht5adhenps6sq801kc9gbl'}
 
 
@@ -17,45 +17,41 @@ def test_init():
 
 def test_repr():
     session = Session()
-    assert repr(Thread(TID, session=session)) == '<pynga.thread.Thread, tid=7384678>'
+    assert repr(Thread(TID, session=session)) == '<pynga.thread.Thread, tid=6406100>'
 
 
 def test_n_pages():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
-    assert thread.n_pages == 6
+    assert thread.n_pages == 2
 
 
 def test_user():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
-    assert thread.user.username == 'icyblade'
+    assert thread.user.username == 'zeg'
 
 
 def test_subject():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
-    assert thread.subject == '[深渊测试团][副本] 6.0 普通/英雄级别团队副本攻略 ---- 悬槌堡'
+    assert thread.subject == 'NGA数据接口'
 
 
 def test_content():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
-    assert thread.content.find('悬槌堡是高里亚帝国的权力核心') != -1
+    assert thread.content == '索引占楼'
 
 
 def test_post():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
     assert isinstance(thread.posts[0], Thread)
-    for i in range(1, len(thread.posts)):
+    for i in range(1, 25):
         assert isinstance(thread.posts[i], Post)
-    assert [thread.posts[i].pid for i in range(1, 100, 20)] == [
-        138914277,
-        140035485,
-        143215067,
-        143426661,
-        143467899
+    assert [thread.posts[i].pid for i in range(1, 4)] == [
+        115692565, 115692624, 115692689
     ]
 
 
