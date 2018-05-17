@@ -1,17 +1,19 @@
 from setuptools import setup
 
-from .pynga.__version__ import (__title__, __description__, __url__, __version__,
-                                __license__, __author__, __author_email__)
+
+about = {}
+with open('./pynga/__version__.py', 'r') as f:
+    exec(f.read(), about)
 
 setup(
-    name=__title__,
-    version=__version__,
+    name=about['__title__'],
+    version=about['__version__'],
     packages=['pynga'],
-    url=__url__,
-    license=__license__,
-    author=__author__,
-    author_email=__author_email__,
-    description=__description__,
+    url=about['__url__'],
+    license=about['__license__'],
+    author=about['__author__'],
+    author_email=about['__author_email__'],
+    description=about['__description__'],
     classifiers=[
         'Programming Language :: Python :: 3.6',
     ],
