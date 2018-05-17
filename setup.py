@@ -28,5 +28,8 @@ setup(
         'pytest>=3.5.0',
         'pytest-flake8>=1.0.0'
     ],
+    extras_require={
+        'test': tests_require,
+    },
     python_requires='>=3.6',
 )
