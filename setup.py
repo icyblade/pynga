@@ -5,6 +5,11 @@ about = {}
 with open('./pynga/__version__.py', 'r') as f:
     exec(f.read(), about)
 
+tests_require = [
+    'pytest>=3.5.0',
+    'pytest-flake8>=1.0.0'
+]
+
 setup(
     name=about['__title__'],
     version=about['__version__'],
@@ -24,10 +29,7 @@ setup(
         'urllib3>=1.18',
         'pytz>=2017.2',
     ],
-    tests_require=[
-        'pytest>=3.5.0',
-        'pytest-flake8>=1.0.0'
-    ],
+    tests_require=tests_require,
     extras_require={
         'test': tests_require,
     },
