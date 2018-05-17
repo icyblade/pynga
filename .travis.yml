@@ -7,6 +7,7 @@ install:
 script:
  - pip install -e .
  - pip install -e .[test]
- - py.test --cov=./pynga/
+ - flake8 --show-source pynga/
+ - py.test test/ --cov=./pynga/
 after_success:
  - codecov

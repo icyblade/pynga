@@ -6,7 +6,7 @@ from pynga.post import Post
 from pynga.session import Session
 from pynga.thread import Thread
 from pynga.user import User
-from .__version__ import __version__
+from .__version__ import __version__  # noqa: F401
 
 
 class NGA(object):
