@@ -5,9 +5,20 @@ from pynga.user import User
 
 
 class Thread(object):
-    def __init__(self, tid, session=None, cache_page=float('inf')):
+    """NGA 帖子基础类.
+
+    Parameters
+    --------
+    tid: int
+        帖子的 TID.
+    session: :class:`Session <pynga.session.Session>`
+        获取数据所使用的 session.
+    page_limit: int
+        最大页面数量. 默认: 无限.
+    """
+    def __init__(self, tid, session=None, page_limit=float('inf')):
         self.tid = tid
-        self.cache_page = cache_page
+        self.page_limit = page_limit
         if session is not None:
             self.session = session
         else:
@@ -17,12 +28,12 @@ class Thread(object):
         return f'<pynga.thread.Thread, tid={self.tid}>'
 
     @property
-    def raw(self):
+    def _raw(self):
         from math import ceil
 
         raw_all = {}
         page = 1
-        while page <= self.cache_page:
+        while page <= self.page_limit:
             raw = self.session.get_json(f'{HOST}/read.php?tid={self.tid}&lite=js&page={page}')
             raw_all[page] = raw
             n_pages = ceil(raw['data']['__ROWS'] / raw['data']['__R__ROWS_PAGE'])
@@ -34,28 +45,44 @@ class Thread(object):
         return raw_all
 
     @property
-    def n_pages(self):
-        return len(self.raw)
+    def n_pages(self) -> int:
+        """获取帖子的总页数."""
+        return len(self._raw)
 
     @property
-    def user(self):
-        uid = int(self.raw[1]['data']['__T']['authorid'])
+    def user(self) -> User:
+        """获取帖子的发帖人."""
+        uid = int(self._raw[1]['data']['__T']['authorid'])
         return User(uid=uid, session=self.session)
 
     @property
-    def subject(self):
-        return self.raw[1]['data']['__T']['subject']
+    def subject(self) -> str:
+        """获取帖子的标题."""
+        return self._raw[1]['data']['__T']['subject']
 
     @property
-    def content(self):
-        return self.raw[1]['data']['__R']['0']['content']  # the thread itself is a special posts
+    def content(self) -> str:
+        """获取帖子的内容.
+
+        注意: 只有主楼的内容会被返回.
+        """
+        return self._raw[1]['data']['__R']['0']['content']  # the thread itself is a special posts
 
     @property
     def posts(self):
+        """获取帖子的回复.
+
+        注意: 不包括主楼.
+
+        Returns
+        --------
+        OrderedDict(帖子楼层, :class:`Post <pynga.post.Post>`)
+            帖子的回复.
+        """
         from collections import OrderedDict
 
         posts = OrderedDict([])
-        for page, raw in self.raw.items():
+        for page, raw in self._raw.items():
             # process posts
             for _, post_raw in raw['data']['__R'].items():
                 if 'pid' in post_raw:  # posts
@@ -71,21 +98,23 @@ class Thread(object):
     def move(self, target_forum, pm=True, pm_message='', push=True):  # pragma: no cover
         """移动帖子.
 
+        注意: 需要 Moderator 权限.
+
         Parameters
         --------
-        target_forum: instance of pynga.forum.Forum.
-            目标版面.
-        pm: bool. (Default: True)
-            是否 PM.
-        pm_message: str. (Default: '')
-            PM 消息内容.
-        push: bool. (Default: True)
-            是否提前帖子.
+        target_forum: :class:`Forum <pynga.forum.Forum>`
+            帖子将要移动的目标版面.
+        pm: bool
+            是否 PM. 默认: True.
+        pm_message: str
+            PM 消息内容. 默认: 空字符串.
+        push: bool
+            是否提前帖子. 默认: True.
 
         Returns
         --------
-        json_data: dict.
-            Response in JSON dict.
+        dict.
+            服务器返回的 JSON，以 dict 的形式
         """
         if not push:
             op = 2048
@@ -104,5 +133,12 @@ class Thread(object):
 
     @property
     def alterinfo(self):
-        alterinfo_raw = self.raw[1]['data']['__R']['0']['alterinfo']
+        """获取帖子的修改/加分/处罚信息.
+
+        Returns
+        --------
+        list of dict
+            该帖子的所有修改/加分/处罚信息.
+        """
+        alterinfo_raw = self._raw[1]['data']['__R']['0']['alterinfo']
         return handle_alterinfo(alterinfo_raw)

@@ -6,6 +6,7 @@ from pynga.post import Post
 from pynga.session import Session
 from pynga.thread import Thread
 from pynga.user import User
+from .__version__ import __version__
 
 
 class NGA(object):
@@ -13,10 +14,11 @@ class NGA(object):
 
     Parameters
     --------
-    authentication: dict.
-        支持的 key 包括 uid, username, cid.
-    max_retries: int. (Default: 5)
-        请求最多重试的次数.
+    authentication: dict
+        登陆信息, 支持的 key 包括 uid, username, cid.
+        其中 cid 为必须的 key, uid 和 username 至少需要指定一个.
+    max_retries: int
+        请求最多重试的次数. 默认: 5.
     """
 
     def __init__(self, authentication=None, max_retries=5):
@@ -34,12 +36,12 @@ class NGA(object):
         text = self.session.get_text(f'{HOST}')
 
         # extract uid
-        uid = re.findall("__CURRENT_UID = parseInt\('([0-9]*)',10\)", text)
+        uid = re.findall('__CURRENT_UID = parseInt\(\'([0-9]*)\',10\)', text)
         assert len(uid) == 1
         uid = int(uid[0]) if uid[0] else None
 
         # extract username
-        username = re.findall("__CURRENT_UNAME = '([\s\S]*?)'", text)
+        username = re.findall('__CURRENT_UNAME = \'([\s\S]*?)\'', text)
         assert len(username) == 1
         username = username[0] if username[0] else None
 
@@ -52,14 +54,15 @@ class NGA(object):
 
         Parameters
         --------
-        uid: int. (Default: None)
+        uid: int
             用户的 UID.
-        username: string. (Default: None)
-            用户的用户名.
+        username: str
+            用户的用户名. 默认: None.
 
         Returns
         --------
-        user: instance of pynga.user.User.
+        :class:`User <pynga.user.User>`
+            定义的用户对象.
         """
         return User(uid=uid, username=username, session=self.session)
 
@@ -68,12 +71,13 @@ class NGA(object):
 
         Parameters
         --------
-        pid: int.
+        pid: int
             回复的 PID.
 
         Returns
         --------
-        post: instance of pynga.post.Post.
+        :class:`Post <pynga.post.Post>`
+            定义的回复对象.
         """
         return Post(pid, session=self.session)
 
@@ -82,39 +86,44 @@ class NGA(object):
 
         Parameters
         --------
-        tid: int.
+        tid: int
             帖子的 TID.
 
         Returns
         --------
-        thread: instance of pynga.thread.Thread.
+        :class:`Thread <pynga.thread.Thread>`
+            定义的帖子对象.
         """
         return Thread(tid, session=self.session, *args, **kwargs)
 
-    def Forum(self, fid):
+    def Forum(self, fid, page_limit=20):
         """定义一个版面.
 
         Parameters
         --------
-        fid: int.
+        fid: int
             版面的 FID.
+        page_limit: int
+            最大页面数量. 默认: 20.
 
         Returns
         --------
-        forum: instance of pynga.forum.Forum.
+        :class:`Forum <pynga.forum.Forum>`
+            定义的版面对象.
         """
-        return Forum(fid, session=self.session)
+        return Forum(fid, session=self.session, page_limit=page_limit)
 
     def SubForum(self, stid):
         """定义一个合集.
 
         Parameters
         --------
-        stid: int.
+        stid: int
             合集的 STID.
 
         Returns
         --------
-        sub_forum: instance of pynga.forum.SubForum.
+        :class:`SubForum <pynga.forum.SubForum>`
+            定义的合集对象.
         """
         return SubForum(stid, session=self.session)

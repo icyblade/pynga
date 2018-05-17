@@ -4,6 +4,18 @@ from pynga.user import User
 
 
 class Post(object):
+    """NGA 回复基础类.
+
+    如果一个回复不存在 PID, 则定义其为未知回复(例如: 贴条).
+    其 PID 定义为 None
+
+    Parameters
+    --------
+    pid: int
+        回复的 PID. 默认: None.
+    session: :class:`Session <pynga.session.Session>`
+        获取数据所使用的 session.
+    """
     def __init__(self, pid=None, session=None):
         if pid is not None:
             pid = int(pid)
@@ -36,55 +48,67 @@ class Post(object):
         return self.pid >= other.pid
 
     @property
-    def raw(self):
+    def _raw(self):
         return self.session.get_json(f'{HOST}/read.php?pid={self.pid}&lite=js')
 
     @property
-    def user(self):
+    def user(self) -> User:
+        """获取回复的回复人."""
         try:
-            uid = int(self.raw['data']['__R']['0']['authorid'])
+            uid = int(self._raw['data']['__R']['0']['authorid'])
         except KeyError:
             uid = None
         return User(uid=uid, session=self.session)
 
     @property
-    def subject(self):
+    def subject(self) -> str:
+        """获取回复的标题."""
         try:
-            return self.raw['data']['__R']['0']['subject']
+            return self._raw['data']['__R']['0']['subject']
         except KeyError:
             return None
 
     @property
-    def content(self):
+    def content(self) -> str:
+        """获取回复的内容."""
         try:
-            return self.raw['data']['__R']['0']['content']
+            return self._raw['data']['__R']['0']['content']
         except KeyError:
             return None
 
     @property
-    def tid(self):
-        return int(self.raw['data']['__R']['0']['tid'])
+    def tid(self) -> int:
+        """获取回复对应的帖子的 TID."""
+        return int(self._raw['data']['__R']['0']['tid'])
 
     @property
-    def fid(self):
-        return int(self.raw['data']['__R']['0']['fid'])
+    def fid(self) -> int:
+        """获取回复对应的帖子的版面的 FID."""
+        return int(self._raw['data']['__R']['0']['fid'])
 
     @property
     def alterinfo(self):
-        alterinfo_raw = self.raw['data']['__R']['0']['alterinfo']
+        """获取回复的修改/加分/处罚信息.
+
+        Returns
+        --------
+        list of dict
+            该回复的所有修改/加分/处罚信息.
+        """
+        alterinfo_raw = self._raw['data']['__R']['0']['alterinfo']
         return handle_alterinfo(alterinfo_raw)
 
     def add_point(self, value, info='', options=None):  # pragma: no cover
-        """回复加分接口.
+        """回复加分.
 
         Parameters
         --------
-        value: int.
+        value: int
             加分声望值.
-        info: str. (Default: '')
-            加分说明.
-        options: list of str. (Default: None)
-            加分相关选项. 可选项包括: 增加/扣除金钱, 增加威望, 给作者发送PM, 主题加入精华区.
+        info: str
+            加分说明. 默认: 空字符串.
+        options: list of str
+            加分相关选项. 可选项包括: 增加/扣除金钱, 增加威望, 给作者发送PM, 主题加入精华区. 默认: None
         """
         value_mapping = {
             15: 16,

@@ -1,5 +1,5 @@
+import datetime
 import json
-from datetime import datetime
 from urllib.parse import quote
 
 import pytz
@@ -8,6 +8,20 @@ from pynga.default_config import ADMIN_LOG_TYPE_MAPPER, HOST, TIMEZONE
 
 
 class User(object):
+    """NGA 用户基础类.
+
+    支持根据 UID 或用户名来指定用户. 如果二者都没有进行指定, 则定义为匿名用户.
+    匿名用户的 UID 和用户名定义为 None, 反之亦然.
+
+    Parameters
+    --------
+    uid: int
+        用户的 UID. 默认: None.
+    username: str
+        用户的用户名. 默认: None.
+    session: :class:`Session <pynga.session.Session>`
+        获取数据所使用的 session.
+    """
     def __init__(self, uid=None, username=None, session=None):
         self.uid = uid
         self.username = username
@@ -30,7 +44,8 @@ class User(object):
         return self.uid != other.uid
 
     @property
-    def is_anonymous(self):
+    def is_anonymous(self) -> bool:
+        """获取用户的匿名状态."""
         return self.uid is None
 
     @staticmethod
@@ -45,11 +60,12 @@ class User(object):
         --------
         dt: instance of datetime.datetime.
         """
-        dt = datetime.fromtimestamp(timestamp, tz=pytz.timezone(TIMEZONE)).replace(tzinfo=None)
+        dt = datetime.datetime.fromtimestamp(timestamp, tz=pytz.timezone(TIMEZONE)).replace(tzinfo=None)
         return dt
 
     @property
-    def register_date(self):
+    def register_date(self) -> datetime.datetime:
+        """获取用户的注册日期及时间."""
         if self.is_anonymous:
             return None
         else:
@@ -64,7 +80,11 @@ class User(object):
             return register_date
 
     @property
-    def sign(self):
+    def sign(self) -> str:
+        """获取用户的签名.
+
+        也可以通过 setter 来设置签名.
+        """
         if self.is_anonymous:
             return None
         else:
@@ -77,6 +97,17 @@ class User(object):
 
     @sign.setter
     def sign(self, value):
+        """设置用户的签名.
+
+        Parameters
+        --------
+        value: str
+            需要设置的签名.
+
+        Raises
+        --------
+        ValueError: 服务器返回的报错信息.
+        """
         if not self.is_anonymous:
             json_data = self.session.post_read_json(
                 f'{HOST}/nuke.php',
@@ -130,10 +161,15 @@ class User(object):
     def get_admin_log(self, type=None):  # pragma: no cover
         """获取当前用户的操作记录.
 
+        Parameters
+        --------
+        type: str
+            操作记录类型名称.
 
         Yields
         --------
-        log: instance of pynga.user.AdminLog.
+        :class:`AdminLog <pynga.user.AdminLog>`.
+            操作记录对象.
         """
         id = None
         if type is None:
@@ -166,7 +202,7 @@ class User(object):
 
         Parameters
         --------
-        admin_log: instance of pynga.user.AdminLog
+        admin_log: :class:`AdminLog <pynga.user.AdminLog>`
             需要撤销的操作记录.
         """
         self._validate_current_user()
@@ -183,7 +219,12 @@ class User(object):
         Parameters
         --------
         item_id: int.
-            物品 ID.
+            购买的物品 ID.
+
+        Returns
+        --------
+        dict
+            服务器返回的 JSON, 以 dict 的形式.
         """
         self._validate_current_user()
         json_data = self.session.post_read_json(
@@ -193,73 +234,76 @@ class User(object):
 
         return json_data
 
-    def use_item(self, inventory_id, uid):  # pragma: no cover
+    def use_item(self, inventory_id, user):  # pragma: no cover
         """使用物品.
 
         Parameters
         --------
-        inventory_id: int.
+        inventory_id: int
             仓库内物品 ID.
-        uid: int.
-            目标 UID.
+        user: :class:`User <pynga.user.User>`
+            使用物品的目标用户对象.
         """
         self._validate_current_user()
         json_data = self.session.post_read_json(
             f'{HOST}/nuke.php?func=item&act=use&raw=3&lite=js',
-            {'id': inventory_id, 'arg': uid}
+            {'id': inventory_id, 'arg': user.uid}
         )
 
         return json_data
 
 
 class AdminLog(object):
-    """操作记录.
+    """NGA 操作记录基础类.
 
     Parameters
     --------
-    data: str
-        JSON data represented in str. For example: {
-            "0": log_id,
-            "1": type,
-            "2": source_uid,
-            "3": target_uid,
-            "4": tid,
-            "5": admin_log_message,
-            "6": timestamp,
-        }
+    data: str or dict
+        操作记录 JSON, 以 str 或 dict 的形式.
+    admin_log_type_mapper: dict
+        操作记录映射表, 一般由服务器提供.
     """
-    def __init__(self, data, admin_log_type_mapper=ADMIN_LOG_TYPE_MAPPER):
-        self.raw = data
-        self.raw_json = json.loads(self.raw)
-        self.admin_log_type_mapper = admin_log_type_mapper
+    def __init__(self, data, admin_log_type_mapper=None):
+        if isinstance(data, dict):
+            self.raw = data
+        else:
+            self.raw = json.loads(data)
+        self.admin_log_type_mapper = admin_log_type_mapper if admin_log_type_mapper else ADMIN_LOG_TYPE_MAPPER
 
     def __repr__(self):
         return f'<pynga.user.AdminLog, id={self.log_id}>'
 
     @property
-    def log_id(self):
-        return int(self.raw_json['0'])
+    def log_id(self) -> int:
+        """操作记录 ID."""
+        return int(self.raw['0'])
 
     @property
-    def type(self):
-        return self.admin_log_type_mapper[str(self.raw_json['1'])]
+    def type(self) -> str:
+        """操作记录类型."""
+        return self.admin_log_type_mapper[str(self.raw['1'])]
 
     @property
-    def source_uid(self):
-        return int(self.raw_json['2'])
+    def source_uid(self) -> int:
+        """操作人 UID."""
+        return int(self.raw['2'])
 
     @property
-    def target_uid(self):
-        return int(self.raw_json['3'])
+    def target_uid(self) -> int:
+        """被操作人 UID."""
+        return int(self.raw['3'])
 
     @property
-    def tid(self):
-        return int(self.raw_json['4'])
+    def tid(self) -> int:
+        """操作记录对应的 TID."""
+        return int(self.raw['4'])
 
     @property
-    def message(self):
-        return self.raw_json['5']
+    def message(self) -> str:
+        """操作信息."""
+        return self.raw['5']
 
     @property
-    def time(self):
-        return User._timestamp_to_datetime(self.raw_json['6'])
+    def time(self) -> datetime.datetime:
+        """操作时间."""
+        return User._timestamp_to_datetime(self.raw['6'])

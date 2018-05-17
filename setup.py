@@ -1,14 +1,17 @@
 from setuptools import setup
 
+from .pynga.__version__ import (__title__, __description__, __url__, __version__,
+                                __license__, __author__, __author_email__)
+
 setup(
-    name='pynga',
-    version='2.0.0',
+    name=__title__,
+    version=__version__,
     packages=['pynga'],
-    url='https://github.com/icyblade/pynga',
-    license='MIT',
-    author='Icyblade Dai',
-    author_email='icyblade.aspx@gmail.com',
-    description='Python implementation of bbs.ngacn.cc',
+    url=__url__,
+    license=__license__,
+    author=__author__,
+    author_email=__author_email__,
+    description=__description__,
     classifiers=[
         'Programming Language :: Python :: 3.6',
     ],

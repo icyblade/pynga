@@ -1,4 +1,5 @@
 import json
+import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,8 +13,23 @@ NGA_JSON_SHIFT = len('window.script_muti_get_var_store=')
 
 
 class Session(object):
+    """NGA Session 基础类.
+
+    Parameters
+    --------
+    authentication: dict
+        登陆信息, 支持的 key 包括 uid, username, cid.
+        其中 cid 为必须的 key, uid 和 username 至少需要指定一个.
+    max_retries: int
+        最大重试次数. 默认: 5.
+    timeout: int
+        超时时间，以秒为单位. 默认: 5.
+    """
     def __init__(self, authentication=None, max_retries=5, timeout=5):
-        self.authentication = authentication
+        if authentication is None:
+            self.authentication = {'guestJs': 1526554662}
+        else:
+            self.authentication = authentication
         self._build_session(max_retries)
         self.timeout = timeout
 
@@ -45,7 +61,13 @@ class Session(object):
                         f'ngaPassportCid={self.authentication["cid"]};'
                     )
                 })
-            if 'username' in self.authentication and 'password' in self.authentication:
+            elif 'guestJs' in self.authentication:
+                session.headers.update({
+                    'Cookie': (
+                        f'guestJs={self.authentication["guestJs"]};'
+                    )
+                })
+            elif 'username' in self.authentication and 'password' in self.authentication:
                 raise NotImplementedError('Login with username/password is not implemented yet.')
         elif self.authentication is None:
             pass
@@ -62,18 +84,22 @@ class Session(object):
         r.encoding = 'gbk'
         return r.text
 
-    def get_text(self, *args, **kwargs):
+    def get_text(self, *args, **kwargs) -> str:
+        """发送 GET 请求并获取纯文本返回."""
         text = self._get(*args, **kwargs)
         return text
 
-    def get_html(self, *args, **kwargs):
+    def get_html(self, *args, **kwargs) -> BeautifulSoup:
+        """发送 GET 请求并获取 HTML 返回."""
         text = self._get(*args, **kwargs)
         html = BeautifulSoup(text, 'html.parser')
         return html
 
-    def get_json(self, *args, **kwargs):
+    def get_json(self, *args, **kwargs) -> dict:
+        """发送 GET 请求并获取 JSON 返回."""
         text = self._get(*args, **kwargs)
-        json_data = json.loads(text[NGA_JSON_SHIFT:], strict=False)
+        data = re.sub(r'\\x([0-9A-F]{2})', r'\\u00\1', text[NGA_JSON_SHIFT:])  # patch \x?? illegal escape
+        json_data = json.loads(data, strict=False)
         return json_data
 
     def _post(self, *args, **kwargs):  # pragma: no cover
@@ -82,7 +108,8 @@ class Session(object):
         r.encoding = 'gbk'
         return r.text
 
-    def post_read_json(self, *args, **kwargs):  # pragma: no cover
+    def post_read_json(self, *args, **kwargs) -> dict:  # pragma: no cover
+        """发送 POST 请求并获取 JSON 返回."""
         text = self._post(*args, **kwargs)
         json_data = json.loads(text[NGA_JSON_SHIFT:], strict=False)
         return json_data

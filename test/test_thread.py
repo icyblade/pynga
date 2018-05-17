@@ -71,5 +71,5 @@ def test_alterinfo():
 
 def test_cache_page():
     session = Session(AUTHENTICATION)
-    thread = Thread(TID, session=session, cache_page=1)
+    thread = Thread(TID, session=session, page_limit=1)
     assert thread.n_pages == 1

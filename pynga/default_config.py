@@ -1,5 +1,7 @@
+from .__version__ import __version__
+
 DEBUG_LEVEL = 'WARNING'
-USER_AGENT = 'pynga/2.0'
+USER_AGENT = f'pynga/{__version__}'
 MAX_THREAD = 100
 HOST = 'http://bbs.ngacn.cc'
 TIMEZONE = 'Asia/Shanghai'

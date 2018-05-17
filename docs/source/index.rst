@@ -1,15 +1,29 @@
-Welcome to pynga's documentation!
-=================================
+:tocdepth: 3
 
+PyNGA: Python implementation of `NGA <https://bbs.ngacn.cc>`_.
+==============================================================
+
+Release v\ |version|.
+
+
+Introduction
+============
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
 
-   pynga
+    intro
 
-Indices and tables
+Examples
+========
+.. toctree::
+    :maxdepth: 2
+
+    examples
+
+API Documentation
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. toctree::
+    :maxdepth: 2
+
+    api

@@ -16,8 +16,6 @@ def test_init():
         Session('invalid_authentication')
     with pytest.raises(NotImplementedError, message='Login with username/password is not implemented yet.'):
         Session({'username': 'username', 'password': 'p@ssw0rd'})
-    with pytest.raises(NotImplementedError, message='Login with username/password is not implemented yet.'):
-        Session({'uid': 123, 'cid': 'abc', 'username': 'username', 'password': 'p@ssw0rd'})
 
     # test max_retries
     with pytest.raises(ValueError, message='int expected, found str.'):
