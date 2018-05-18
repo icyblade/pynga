@@ -23,7 +23,7 @@ class Session(object):
     max_retries: int
         最大重试次数. 默认: 5.
     timeout: int
-        超时时间，以秒为单位. 默认: 5.
+        超时时间, 以秒为单位. 默认: 5.
     """
     def __init__(self, authentication=None, max_retries=5, timeout=5):
         if authentication is None:

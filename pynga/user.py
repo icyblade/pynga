@@ -50,7 +50,7 @@ class User(object):
 
     @staticmethod
     def _timestamp_to_datetime(timestamp):
-        """在 UTC+8 时区下，将时间戳转化为无 tz 的 datetime 对象.
+        """在 UTC+8 时区下, 将时间戳转化为无 tz 的 datetime 对象.
 
         Parameters
         --------

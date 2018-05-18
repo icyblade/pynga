@@ -114,7 +114,7 @@ class Thread(object):
         Returns
         --------
         dict.
-            服务器返回的 JSON，以 dict 的形式
+            服务器返回的 JSON, 以 dict 的形式
         """
         if not push:
             op = 2048
