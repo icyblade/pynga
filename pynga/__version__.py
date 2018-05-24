@@ -1,7 +1,7 @@
 __title__ = 'pynga'
 __description__ = 'Python implementation of NGA'
 __url__ = 'http://github.com/icyblade/pynga'
-__version__ = '2.1.2'
+__version__ = '2.1.3'
 __author__ = 'Icyblade Dai'
 __author_email__ = 'icyblade.aspx@gmail.com'
 __license__ = 'MIT'

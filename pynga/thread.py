@@ -85,13 +85,12 @@ class Thread(object):
         for page, raw in self._raw.items():
             # process posts
             for _, post_raw in raw['data']['__R'].items():
+                if post_raw['lou'] == 0:  # skip main floor
+                    continue
                 if 'pid' in post_raw:  # posts
                     posts[post_raw['lou']] = Post(post_raw['pid'], session=self.session)
-                else:
+                else:  # comments, etc
                     posts[post_raw['lou']] = Post(None, session=self.session)
-
-        assert posts[0].pid == 0, 'Unknown error.'
-        posts[0] = self
 
         return posts
 

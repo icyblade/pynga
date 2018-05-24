@@ -47,7 +47,8 @@ def test_content():
 def test_post():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session)
-    assert isinstance(thread.posts[0], Thread)
+    with pytest.raises(KeyError):
+        thread.posts[0]
     for i in range(1, 25):
         assert isinstance(thread.posts[i], Post)
     assert [thread.posts[i].pid for i in range(1, 4)] == [

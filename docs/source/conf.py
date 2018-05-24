@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pynga'
-copyright = '2017, Icyblade Dai'
+copyright = '2017-2018, Icyblade Dai'
 author = 'Icyblade Dai'
 
 # The version info for the project you're documenting, acts as replacement for
