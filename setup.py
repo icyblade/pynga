@@ -8,7 +8,7 @@ with open('README.md', 'r') as f:
     readme = f.read()
 
 tests_require = [
-    'pytest>=3.5.0',
+    'pytest>=3.5.0,<3.7.0',
     'pytest-flake8>=1.0.0'
 ]
 
@@ -25,6 +25,7 @@ setup(
     long_description_content_type='text/markdown',
     classifiers=[
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     install_requires=[
         'requests>=2.10.0',
