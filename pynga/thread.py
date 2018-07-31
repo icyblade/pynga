@@ -58,7 +58,7 @@ class Thread(object):
     @property
     def subject(self) -> str:
         """获取帖子的标题."""
-        return self._raw[1]['data']['__T']['subject']
+        return str(self._raw[1]['data']['__T']['subject'])
 
     @property
     def content(self) -> str:
@@ -66,7 +66,7 @@ class Thread(object):
 
         注意: 只有主楼的内容会被返回.
         """
-        return self._raw[1]['data']['__R']['0']['content']  # the thread itself is a special posts
+        return str(self._raw[1]['data']['__R']['0']['content'])  # the thread itself is a special posts
 
     @property
     def posts(self):

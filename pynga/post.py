@@ -64,7 +64,7 @@ class Post(object):
     def subject(self) -> str:
         """获取回复的标题."""
         try:
-            return self._raw['data']['__R']['0']['subject']
+            return str(self._raw['data']['__R']['0']['subject'])
         except KeyError:
             return None
 
@@ -72,7 +72,7 @@ class Post(object):
     def content(self) -> str:
         """获取回复的内容."""
         try:
-            return self._raw['data']['__R']['0']['content']
+            return str(self._raw['data']['__R']['0']['content'])
         except KeyError:
             return None
 

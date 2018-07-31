@@ -93,7 +93,7 @@ class User(object):
                 {'__lib': 'set_sign', '__act': 'get', 'uid': self.uid, 'lite': 'js'}
             )
 
-            return json_data['data']['0']
+            return str(json_data['data']['0'])
 
     @sign.setter
     def sign(self, value):
@@ -301,7 +301,7 @@ class AdminLog(object):
     @property
     def message(self) -> str:
         """操作信息."""
-        return self.raw['5']
+        return str(self.raw['5'])
 
     @property
     def time(self) -> datetime.datetime:
