@@ -30,9 +30,15 @@ def handle_alterinfo(alterinfo_raw):
             })
         elif action == 'U':  # undo
             assert len(alterinfo) in {3, 4}
+            if alterinfo[0][1:].find('/') != -1:
+                reputation = alterinfo[0][1:].split('/')
+                assert len(set(reputation)) == 1
+                reputation = int(reputation[0])
+            else:
+                reputation = alterinfo[0][1:]
             result.append({
                 'action': action,
-                'reputation': int(alterinfo[0][1:]),  # 声望
+                'reputation': reputation,  # 声望
                 'rvrc': float(alterinfo[1]),  # 威望
                 'gold': float(alterinfo[2]),  # 金钱
             })
