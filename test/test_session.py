@@ -29,10 +29,10 @@ def test_http_get():
 
     text = session.get_text('http://bbs.ngacn.cc/thread.php?fid=7')
     regex_result = re.findall('<title>([\S\s]+?)</title>', text)
-    assert regex_result == ['艾泽拉斯议事厅 - Hall of Azeroth']
+    assert regex_result == ['艾泽拉斯议事厅 - Hall of Azeroth NGA玩家社区']
 
     html = session.get_html('http://bbs.ngacn.cc/thread.php?fid=7')
-    assert html.title.text == '艾泽拉斯议事厅 - Hall of Azeroth'
+    assert html.title.text == '艾泽拉斯议事厅 - Hall of Azeroth NGA玩家社区'
 
     json_data = session.get_json('http://bbs.ngacn.cc/thread.php?fid=7&lite=js')
     assert json_data['data']['__F']['fid'] == 7

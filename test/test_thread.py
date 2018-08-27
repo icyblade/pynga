@@ -69,6 +69,23 @@ def test_alterinfo():
     }
     assert expected in list(thread.alterinfo)
 
+    # lesser nuke
+    session = Session(AUTHENTICATION)
+    thread = Thread(14664026, session=session)
+    with pytest.warns(UserWarning, match='Action L is not fully implemented yet'):
+        list(thread.alterinfo)
+
+    # multiple reputations
+    session = Session(AUTHENTICATION)
+    thread = Thread(14114315, session=session)
+    expected = {
+        'action': 'U',
+        'gold': -3.0,
+        'reputation': -300,
+        'rvrc': -2.0,
+    }
+    assert expected in list(thread.alterinfo)
+
 
 def test_cache_page():
     session = Session(AUTHENTICATION)
