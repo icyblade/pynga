@@ -35,7 +35,7 @@ def handle_alterinfo(alterinfo_raw):
                 assert len(set(reputation)) == 1
                 reputation = int(reputation[0])
             else:
-                reputation = alterinfo[0][1:]
+                reputation = int(alterinfo[0][1:])
             result.append({
                 'action': action,
                 'reputation': reputation,  # 声望
