@@ -91,3 +91,9 @@ def test_cache_page():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session, page_limit=1)
     assert thread.n_pages == 1
+
+
+def test_parent_forum():
+    session = Session(AUTHENTICATION)
+    thread = Thread(TID, session=session, page_limit=1)
+    assert thread.forum.fid == 335
