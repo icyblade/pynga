@@ -290,12 +290,14 @@ class AdminLog(object):
     @property
     def source_uid(self) -> int:
         """操作人 UID."""
-        return int(self.raw['2'])
+        uid = int(self.raw['2'])
+        return None if uid == 0 else uid
 
     @property
     def target_uid(self) -> int:
         """被操作人 UID."""
-        return int(self.raw['3'])
+        uid = int(self.raw['3'])
+        return None if uid == 0 else uid
 
     @property
     def tid(self) -> int:
