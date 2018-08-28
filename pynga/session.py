@@ -24,16 +24,18 @@ class Session(object):
         最大重试次数. 默认: 5.
     timeout: int
         超时时间, 以秒为单位. 默认: 5.
+    max_workers: int
+        并行度. 默认: 1.
     """
-    def __init__(self, authentication=None, max_retries=5, timeout=5):
+    def __init__(self, authentication=None, max_retries=5, timeout=5, max_workers=1):
         if authentication is None:
             self.authentication = {'guestJs': 1526554662}
         else:
             self.authentication = authentication
-        self._build_session(max_retries)
+        self._build_session(max_retries, max_workers)
         self.timeout = timeout
 
-    def _build_session(self, max_retries):
+    def _build_session(self, max_retries, max_workers):
         if not isinstance(max_retries, int):
             raise ValueError(f'int expected, found {type(max_retries)}.')
         elif max_retries < 1:
@@ -76,7 +78,10 @@ class Session(object):
 
         session.headers['User-Agent'] = USER_AGENT
 
-        self.session = session
+        if max_workers == 1:
+            self.session = session
+        else:
+            raise NotImplementedError()
 
     def _get(self, *args, **kwargs):
         kwargs['timeout'] = self.timeout

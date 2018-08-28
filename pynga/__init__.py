@@ -18,11 +18,17 @@ class NGA(object):
         登陆信息, 支持的 key 包括 uid, username, cid.
         其中 cid 为必须的 key, uid 和 username 至少需要指定一个.
     max_retries: int
-        请求最多重试的次数. 默认: 5.
+        最大重试次数. 默认: 5.
+    timeout: int
+        超时时间, 以秒为单位. 默认: 5.
+    max_workers: int
+        并行度. 默认: 1.
     """
-
-    def __init__(self, authentication=None, max_retries=5):
-        self.session = Session(authentication, max_retries)
+    def __init__(self, authentication=None, max_retries=5, timeout=5, max_workers=1):
+        self.session = Session(
+            authentication,
+            max_retries=max_retries, timeout=timeout, max_workers=max_workers
+        )
         self._set_current_user()
 
     def _set_current_user(self):
