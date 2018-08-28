@@ -1,5 +1,5 @@
+import pynga.forum
 from pynga.default_config import HOST
-from pynga.forum import Forum
 from pynga.misc import handle_alterinfo
 from pynga.post import Post
 from pynga.user import User
@@ -144,7 +144,12 @@ class Thread(object):
         return handle_alterinfo(alterinfo_raw)
 
     @property
-    def forum(self) -> Forum:
-        """获取帖子的所在版面."""
+    def forum(self):
+        """获取帖子的所在版面.
+
+        Returns
+        --------
+        :class:`Forum <pynga.forum.Forum>`
+        """
         fid = int(self._raw[1]['data']['__T']['fid'])
-        return Forum(fid=fid, session=self.session)
+        return pynga.forum.Forum(fid=fid, session=self.session)
