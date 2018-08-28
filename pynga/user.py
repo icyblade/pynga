@@ -281,7 +281,11 @@ class AdminLog(object):
     @property
     def type(self) -> str:
         """操作记录类型."""
-        return self.admin_log_type_mapper[str(self.raw['1'])]
+        admin_log_type_code = str(self.raw['1'])
+        try:
+            return self.admin_log_type_mapper[admin_log_type_code]
+        except KeyError:
+            return f'undefined_type_{admin_log_type_code}'
 
     @property
     def source_uid(self) -> int:
