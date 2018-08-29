@@ -1,5 +1,6 @@
 import json
 import re
+from time import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -29,7 +30,7 @@ class Session(object):
     """
     def __init__(self, authentication=None, max_retries=5, timeout=5, max_workers=1):
         if authentication is None:
-            self.authentication = {'guestJs': 1526554662}
+            self.authentication = {'guestJs': int(time())}
         else:
             self.authentication = authentication
         self._build_session(max_retries, max_workers)
