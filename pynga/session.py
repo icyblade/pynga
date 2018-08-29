@@ -30,7 +30,7 @@ class Session(object):
     """
     def __init__(self, authentication=None, max_retries=5, timeout=5, max_workers=1):
         if authentication is None:
-            self.authentication = {'guestJs': int(time())}
+            self.authentication = {'guestJs': int(time()) - 60}
         else:
             self.authentication = authentication
         self._build_session(max_retries, max_workers)
