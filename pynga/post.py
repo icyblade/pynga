@@ -154,3 +154,16 @@ class Post(object):
         json_data = self.session.post_read_json(f'{HOST}/nuke.php', post_data)
 
         return json_data
+
+    @property
+    def attachments(self):
+        """获取回复的附件.
+
+        Returns
+        --------
+        list of dict
+        """
+        if 'attachs' in self._raw['data']['__R']['0']:
+            return list(self._raw['data']['__R']['0']['attachs'].values())
+        else:
+            return []

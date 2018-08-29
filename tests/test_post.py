@@ -85,3 +85,36 @@ def test_operator():
     assert another_post < post
     assert another_post <= post
     assert post <= same_post
+
+
+def test_attachments():
+    session = Session()
+    post = Post(PID, session=session)
+    assert post.attachments == []
+    post = Post(283846735, session=session)
+    assert post.attachments == [
+        {
+            'attachurl': 'mon_201807/01/-7knvQ5-dk0pX11ZaeT3cS1hn-1hn.jpg',
+            'size': 3745,
+            'type': 'img',
+            'subid': 0,
+            'url_utf8_org_name': '',
+            'dscp': '',
+            'path': 'mon_201807/01',
+            'name': '-7knvQ5-dk0pX11ZaeT3cS1hn-1hn.jpg',
+            'ext': 'jpg',
+            'thumb': 120
+        },
+        {
+            'attachurl': 'mon_201807/01/-7knvQ5-ci95XdZ3iT3cSqo-zk.jpg',
+            'size': 1261,
+            'type': 'img',
+            'subid': 1,
+            'url_utf8_org_name': '',
+            'dscp': '',
+            'path': 'mon_201807/01',
+            'name': '-7knvQ5-ci95XdZ3iT3cSqo-zk.jpg',
+            'ext': 'jpg',
+            'thumb': 120
+        }
+    ]

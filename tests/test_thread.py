@@ -97,3 +97,24 @@ def test_parent_forum():
     session = Session(AUTHENTICATION)
     thread = Thread(TID, session=session, page_limit=1)
     assert thread.forum.fid == 335
+
+
+def test_attachments():
+    session = Session()
+    thread = Thread(TID, session=session, page_limit=1)
+    assert thread.attachments == []
+    thread = Thread(14380789, session=session, page_limit=1)
+    assert thread.attachments == [
+        {
+            'attachurl': 'mon_201806/26/-7knvQ5-fjimK15T1kSe6-iv.jpg',
+            'size': 41,
+            'type': 'img',
+            'subid': 0,
+            'url_utf8_org_name': 'timg%20%281%29%2ejpg',
+            'dscp': '',
+            'path': 'mon_201806/26',
+            'name': '-7knvQ5-fjimK15T1kSe6-iv.jpg',
+            'ext': 'jpg',
+            'thumb': 56
+        }
+    ]

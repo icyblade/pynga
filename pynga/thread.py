@@ -153,3 +153,16 @@ class Thread(object):
         """
         fid = int(self._raw[1]['data']['__T']['fid'])
         return pynga.forum.Forum(fid=fid, session=self.session)
+
+    @property
+    def attachments(self):
+        """获取帖子的附件.
+
+        Returns
+        --------
+        list of dict
+        """
+        if 'attachs' in self._raw[1]['data']['__T']['post_misc_var']:
+            return list(self._raw[1]['data']['__T']['post_misc_var']['attachs'].values())
+        else:
+            return []
