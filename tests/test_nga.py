@@ -42,7 +42,7 @@ def test_post():
 
 def test_thread():
     nga = NGA(AUTHENTICATION)
-    thread = nga.Thread(7384678)
+    thread = nga.Thread(7384678, page_limit=1)
     assert thread.user.username == 'icyblade'
 
 

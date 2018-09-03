@@ -58,7 +58,7 @@ def test_post():
 
 def test_alterinfo():
     session = Session(AUTHENTICATION)
-    thread = Thread(13333884, session=session)
+    thread = Thread(13333884, session=session, page_limit=1)
     expected = {
         'action': 'A',
         'gold': 0.3,
@@ -71,13 +71,13 @@ def test_alterinfo():
 
     # lesser nuke
     session = Session(AUTHENTICATION)
-    thread = Thread(14664026, session=session)
+    thread = Thread(14664026, session=session, page_limit=1)
     with pytest.warns(UserWarning, match='Action L is not fully implemented yet'):
         list(thread.alterinfo)
 
     # multiple reputations
     session = Session(AUTHENTICATION)
-    thread = Thread(14114315, session=session)
+    thread = Thread(14114315, session=session, page_limit=1)
     expected = {
         'action': 'U',
         'gold': -3.0,

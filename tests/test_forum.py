@@ -24,7 +24,7 @@ def test_repr():
 
 def test_threads():
     session = Session(AUTHENTICATION)
-    forum = Forum(FID, session=session, page_limit=5)
+    forum = Forum(FID, session=session, page_limit=2)
 
     for tid, thread in forum.threads.items():
         assert isinstance(thread, Thread)
