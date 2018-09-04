@@ -33,8 +33,10 @@ class Session(object):
             self.authentication = {'guestJs': int(time()) - 60}
         else:
             self.authentication = authentication
-        self._build_session(max_retries, max_workers)
+        self.max_retries = max_retries
+        self.max_workers = max_workers
         self.timeout = timeout
+        self._build_session(self.max_retries, self.max_workers)
 
     def _build_session(self, max_retries, max_workers):
         if not isinstance(max_retries, int):
@@ -72,10 +74,8 @@ class Session(object):
                 })
             elif 'username' in self.authentication and 'password' in self.authentication:
                 raise NotImplementedError('Login with username/password is not implemented yet.')
-        elif self.authentication is None:
-            pass
         else:
-            raise ValueError(f'dict or None expected, found {type(self.authentication)}.')
+            raise ValueError(f'dict expected, found {type(self.authentication)}.')
 
         session.headers['User-Agent'] = USER_AGENT
 

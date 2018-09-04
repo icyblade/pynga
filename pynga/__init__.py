@@ -1,4 +1,5 @@
 import re
+from functools import lru_cache
 
 from pynga.default_config import HOST
 from pynga.forum import Forum, SubForum
@@ -25,11 +26,14 @@ class NGA(object):
         并行度. 默认: 1.
     """
     def __init__(self, authentication=None, max_retries=5, timeout=5, max_workers=1):
+        self._create_session(authentication, max_retries, timeout, max_workers)
+        self._set_current_user()
+
+    def _create_session(self, authentication, max_retries, timeout, max_workers):
         self.session = Session(
             authentication,
             max_retries=max_retries, timeout=timeout, max_workers=max_workers
         )
-        self._set_current_user()
 
     def _set_current_user(self):
         authentication = self._get_current_user_info()
@@ -53,6 +57,18 @@ class NGA(object):
 
         return {'uid': uid, 'username': username}
 
+    def reset_cache(self):
+        self.Forum.cache_clear()
+        self.SubForum.cache_clear()
+        self.Thread.cache_clear()
+        self.Post.cache_clear()
+        self.User.cache_clear()
+        self._create_session(
+            self.session.authentication,
+            self.session.max_retries, self.session.timeout, self.session.max_workers
+        )
+
+    @lru_cache(maxsize=128, typed=True)
     def User(self, uid=None, username=None):
         """定义一个 NGA 用户.
 
@@ -72,6 +88,7 @@ class NGA(object):
         """
         return User(uid=uid, username=username, session=self.session)
 
+    @lru_cache(maxsize=128, typed=True)
     def Post(self, pid):
         """定义一个回复.
 
@@ -87,6 +104,7 @@ class NGA(object):
         """
         return Post(pid, session=self.session)
 
+    @lru_cache(maxsize=128, typed=True)
     def Thread(self, tid, *args, **kwargs):
         """定义一个帖子.
 
@@ -102,6 +120,7 @@ class NGA(object):
         """
         return Thread(tid, session=self.session, *args, **kwargs)
 
+    @lru_cache(maxsize=128, typed=True)
     def Forum(self, fid, page_limit=20):
         """定义一个版面.
 
@@ -119,6 +138,7 @@ class NGA(object):
         """
         return Forum(fid, session=self.session, page_limit=page_limit)
 
+    @lru_cache(maxsize=128, typed=True)
     def SubForum(self, stid):
         """定义一个合集.
 

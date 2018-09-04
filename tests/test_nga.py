@@ -56,39 +56,6 @@ def test_sub_forum():
     nga.SubForum(11477435)
 
 
-def test_multiple_workers():
-    from time import time
-
-    test_fids = [
-        7, 8, 10, 102, 102, 116, 124, 124, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190,
-        191, 200, 201, 213, 218, 230, 240, 254, 255, 264, 264, 272, 306, 310, 310, 318, 320,
-        321, 323, 332, 334, 335, 353, 388, 390, 406, 411, 412, 414, 414, 416, 420, 422, 424,
-        425, 426, 427, 428, 431, 431, 433, 434, 435, 436, 436, 441, 442, 443, 444, 445, 447,
-        452, 453, 454, 455, 459, 463, 465, 466, 468, 469, 472, 472, 474, 476, 477, 480, 481,
-        482, 484, 486, 487
-    ]
-    max_workers = 5
-
-    # one worker
-    start = time()
-    result = []
-    nga = NGA(AUTHENTICATION, max_workers=1)
-    for i in test_fids:
-        result.append(nga.Forum(i, page_limit=1))
-    end = time()
-    single_time = end - start
-
-    # multiple workers
-    with pytest.raises(NotImplementedError):
-        start = time()
-        result = []
-        nga = NGA(AUTHENTICATION, max_workers=5)
-        for i in test_fids:
-            result.append(nga.Forum(i, page_limit=1))
-        end = time()
-        multi_time = end - start
-    multi_time = 0
-
-    print(f'{max_workers} threads: {multi_time:.2f}, 1 thread: {single_time:.2f}')
-
-    assert multi_time <= single_time / 3
+def test_reset_cache():
+    nga = NGA()
+    nga.reset_cache()

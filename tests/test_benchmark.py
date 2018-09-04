@@ -19,3 +19,24 @@ def test_stress():
     I hope we can do this in 60 seconds.
     """
     print(f'{__name__} duration: {end-start:.2f}s')
+
+
+@local
+def test_object_reuse():
+    nga = NGA()
+
+    one = nga.Thread(13405313, page_limit=1)
+    other = nga.Thread(13405313, page_limit=1)
+    assert id(one) == id(other)
+
+    one = nga.User(uid=58)
+    other = nga.User(uid=58)
+    assert id(one) == id(other)
+
+    one = nga.Post(267645659)
+    other = nga.Post(267645659)
+    assert id(one) == id(other)
+
+    one = nga.Forum(7)
+    other = nga.Forum(7)
+    assert id(one) == id(other)
