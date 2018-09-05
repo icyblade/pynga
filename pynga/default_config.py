@@ -3,7 +3,7 @@ from .__version__ import __version__
 DEBUG_LEVEL = 'WARNING'
 USER_AGENT = f'pynga/{__version__}'
 MAX_THREAD = 100
-HOST = 'http://bbs.ngacn.cc'
+HOST = 'https://bbs.nga.cn'
 TIMEZONE = 'Asia/Shanghai'
 FORUM_PAGE_SLOW_QUERY_LIMIT = 500
 ADMIN_LOG_TYPE_MAPPER = {
